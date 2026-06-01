@@ -1,0 +1,37 @@
+.next
+node_modules
+out
+
+.env*
+!.env.example
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+.DS_Store
+
+# 项目根目录素材源文件（已转码/复制到 public/，无需入库）
+/背景视频.mp4
+/kling_*.png
+/easypln/
+/instacash/
+
+# Safari 专用 HEVC .mov 源（体积大不入库；<video> 会自动回退到同名 .webm）
+public/figma/credmex/*-phone.mov
+
+# === 素材源文件 / 临时目录（不参与网站构建，无需入库部署）===
+/ae/
+/bridge/
+/roiheads_assets/
+/roiheads_images/
+/xiangmu/
+# 根目录 PNG 源图，已转码为 public/img/*.webp 供网站使用
+/img/
+/_unused/
+/.tmp-compare/
+/.tmp-nav-video-frames/
+/手持手机.aep
+*.aep
+/.DS_Store

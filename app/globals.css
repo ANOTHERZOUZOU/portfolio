@@ -1,0 +1,1484 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #f6f6f0;
+  --brand-green: #c7fc07;
+
+  /* ============================================================
+     全站默认字体栈 (唯一数据源).
+     font-family 是"按字形逐字回退": Poppins 不含中文字形, 所以
+     拉丁字母 / 数字走 Poppins, 中文自动落到后面的 PingFang.
+       → 英文 = Poppins, 中文 = PingFang (Windows 无 PingFang 时退到
+         微软雅黑, 老 macOS 退到冬青黑, 最后 system-ui/sans-serif).
+     所有正文 UI 都应引用 var(--font-sans), 不要再写散落的
+     "var(--font-poppins), Arial..." 之类. (Credmex 排版样张里刻意
+     展示的 Lexend/Fugaz One/Inter 等品牌字属于例外, 不走这里.)
+     ============================================================ */
+  --font-sans: var(--font-poppins), "PingFang SC", "PingFang TC",
+    "Microsoft YaHei", "Hiragino Sans GB", system-ui, sans-serif;
+
+  /* ============================================================
+     标准响应式断点 (与 Tailwind v4 默认值 + 业界主流约定一致):
+       sm  ≥ 640px   大屏手机 / 小屏 landscape
+       md  ≥ 768px   平板竖屏
+       lg  ≥ 1024px  平板横屏 / 小屏笔记本
+       xl  ≥ 1280px  桌面 (设计稿基准 1440 落在此区间)
+       2xl ≥ 1536px  大屏桌面
+     这里仅作约定常量, 真正的 media query 走 Tailwind 的 sm:/md:/lg:/...
+     前缀, JS 端用 lib/breakpoints.ts 的 useBreakpoint
+     ============================================================ */
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1536px;
+
+  /* 设计稿基准舞台尺寸 (与 HomeExperience 中的 STAGE_W/H 保持一致),
+     供其他需要 stage 等比参考的样式使用 */
+  --stage-w: 1440px;
+  --stage-h: 800px;
+}
+
+/* ============================================================
+   全站统一设计 token (唯一数据源)
+   ------------------------------------------------------------
+   适配总策略 (hybrid):
+     · "流式内容" (正文/标题/卡片/区块标题) → 用下面的 --text-* 流式
+       字号 (clamp), 跨断点一条公式平滑缩放, 移动端仍可读;
+     · "缩放画布" (Credmex 内部 Figma frame / 设备 mockup /
+       HomeExperience stage) → 保留设计稿原始 px, 靠外层
+       transform: scale 整体等比, px 数值对齐下面的 --stage-* 阶梯.
+
+   字号阶梯 (root = 16px). 命名语义化, min/max 取自现有代码实际值,
+   所以是"把散落值收敛到同一阶梯", 而非引入全新视觉尺寸:
+   ============================================================ */
+/* 仅把"新增、不与 Tailwind 默认冲突"的流式字号放进 @theme, 这样可用
+   className="text-h1 / text-body ..." 工具类, 且不破坏 Tailwind 原生的
+   text-xs/sm/base 等. 行高/字间距/间距刻意不放进 @theme, 避免覆盖
+   Tailwind 原生的 leading- / tracking- / p- 等 (组件已在用 mb-10、px-10). */
+@theme {
+  --text-caption:   clamp(11px, 0.45vw + 9.2px, 12px);   /* 旧 10–12 */
+  --text-body-sm:   clamp(13px, 0.40vw + 11.1px, 14px);  /* 旧 12.5–14 */
+  --text-body:      clamp(15px, 0.60vw + 11.2px, 18px);  /* 旧 15–18 */
+  --text-subtitle:  clamp(18px, 1.00vw + 13.6px, 20px);  /* 旧 18–20 */
+  --text-h4:        clamp(22px, 1.60vw + 14px, 24px);    /* 旧 20–24 */
+  --text-h3:        clamp(26px, 3.00vw + 8px, 32px);     /* 旧 30 */
+  --text-h2:        clamp(36px, 5.00vw, 48px);           /* 旧 36–48 */
+  --text-h1:        clamp(40px, 6.00vw, 64px);           /* 旧 60–64 */
+}
+
+:root {
+  /* —— 行高阶梯 (4 档, 收敛旧 0.97/1.1/1.2/1.3/1.4/1.45/1.5/1.6/1.63) —— */
+  --lh-tight: 1;      /* 大标题 */
+  --lh-snug: 1.2;     /* 标题/副标 */
+  --lh-normal: 1.4;   /* 次级正文 */
+  --lh-relaxed: 1.6;  /* 长正文 */
+
+  /* —— 字间距阶梯 (em, 随字号自适应; 收敛旧 -0.009~-0.12rem) —— */
+  --ls-tight: -0.03em;  /* 大标题 */
+  --ls-snug: -0.02em;   /* 标题 */
+  --ls-normal: -0.01em; /* 正文 */
+  --ls-none: 0;
+
+  /* —— 间距阶梯 (4pt 基准, 用 var(--space-*) 引用; 不生成 Tailwind 工具类) —— */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 120px;
+
+  /* —— 缩放画布专用 px 阶梯 (与 --text-* 同一数值族, 但固定 px,
+     交给外层 transform: scale 等比缩放; 缩放画布内不要用 clamp) —— */
+  --stage-text-caption: 10px;
+  --stage-text-body-sm: 12px;
+  --stage-text-body: 15px;
+  --stage-text-subtitle: 18px;
+  --stage-text-h4: 24px;
+  --stage-text-h3: 30px;
+  --stage-text-h2: 40px;
+  --stage-text-h1: 60px;
+}
+
+/* 语义化排版工具类: 一行套用 字号 + 行高 + 字间距.
+   用法: <h2 className="t-h2">…</h2> 或 class="t-body" */
+.t-h1   { font-size: var(--text-h1);   line-height: var(--lh-tight); letter-spacing: var(--ls-tight) }
+.t-h2   { font-size: var(--text-h2);   line-height: var(--lh-tight); letter-spacing: var(--ls-tight) }
+.t-h3   { font-size: var(--text-h3);   line-height: var(--lh-snug);  letter-spacing: var(--ls-snug) }
+.t-h4   { font-size: var(--text-h4);   line-height: var(--lh-snug);  letter-spacing: var(--ls-snug) }
+.t-subtitle { font-size: var(--text-subtitle); line-height: var(--lh-snug); letter-spacing: var(--ls-normal) }
+.t-body { font-size: var(--text-body); line-height: var(--lh-relaxed); letter-spacing: var(--ls-normal) }
+.t-body-sm { font-size: var(--text-body-sm); line-height: var(--lh-normal); letter-spacing: var(--ls-normal) }
+.t-caption { font-size: var(--text-caption); line-height: var(--lh-snug); letter-spacing: var(--ls-normal) }
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+body {
+  /* 100svh > 100dvh > 100vh:
+       移动浏览器地址栏收起/弹出时 100vh 会突变, 100dvh 会跟随,
+       100svh 是"始终可见的最小高度"避免首屏内容被遮. 这里用
+       100dvh 给 body 最小高度, 既能跟随手势, 也避免 dvh 不支持
+       时 fallback 到 100vh (CSS 优先级回退) */
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+::selection {
+  background: var(--brand-green);
+  color: #050505;
+}
+
+/* ============================================================
+   第四屏列表项 hover 效果 (移植自 Shopify Editions Winter2026
+   的 .sidebar-link). 视觉次序:
+     - 静态: 文字 + 罗马数字均为 60% 白
+     - hover 进入: 文字立即变白; 罗马数字延后 0.3s 变白;
+       下方一条横向虚线用 clip-path 从左→右扫出 (0.3s, delay 0.15s)
+     - hover 离开: 文字延后 0.3s 才变暗, 罗马数字立刻变暗,
+       虚线 clip-path 收回
+   ============================================================ */
+.s4-link {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  color: #fff;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.s4-link .s4-label {
+  /* 文字永远全白, 不带不透明度 */
+  flex: 0 1 auto;
+  min-width: 0;
+  color: #fff;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+/* 中间的虚线 leader: 占据 label 和 index 之间的剩余空间, 垂直居中对齐文字 */
+.s4-link .s4-leader {
+  position: relative;
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-width: 0;
+}
+
+.s4-link .s4-leader::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  transform: translateY(-50%);
+  /* 横向小点 (Shopify Editions 同款: 3px 周期 1px 实色, 30% 高度 → 细密 dotted) */
+  background-image: linear-gradient(
+    270deg,
+    #fff 1px,
+    transparent 1px
+  );
+  background-position: center;
+  background-repeat: repeat-x;
+  background-size: 3px 30%;
+  /* 默认裁掉, hover 时 clip-path 恢复从左→右扫开 (0.3s, delay 0.15s) */
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.3s ease-in-out 0.15s;
+  pointer-events: none;
+}
+
+.s4-link .s4-index {
+  display: inline-block;
+  flex: 0 0 18px;
+  width: 18px;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  /* 默认 (hover-out): 罗马数字立刻变暗 */
+  transition: color 0.3s ease-in-out 0s;
+}
+
+.s4-link:hover .s4-label,
+.s4-link:focus-visible .s4-label {
+  text-decoration-line: underline;
+}
+
+.s4-link:hover .s4-leader::after,
+.s4-link:focus-visible .s4-leader::after {
+  clip-path: inset(0);
+}
+
+.s4-link:hover .s4-index,
+.s4-link:focus-visible .s4-index {
+  color: #fff;
+  transition-delay: 0.3s;
+}
+
+/* ============================================================
+   选中态 (.is-active): 标记当前所在章节
+     - label / index 保持全白 (#fff) 高亮
+     - 虚线 leader 常驻 (clip-path 完全打开), 用白色虚点
+     - 同时, 父级 ul.s4-nav-has-active 会把其它兄弟项 label/index
+       拉到偏暗的白 (45% / 30%), 让选中那一项相对突出
+   hover 状态在 active 之上叠加 (active 已经是白, hover 只追加 underline)
+   ============================================================ */
+.s4-link .s4-label {
+  transition: color 0.3s ease-in-out 0s;
+}
+
+.s4-link.is-active .s4-label {
+  color: #fff;
+  text-decoration-line: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.6);
+}
+
+.s4-link.is-active .s4-leader::after {
+  clip-path: inset(0);
+  transition-delay: 0s;
+}
+
+.s4-link.is-active .s4-index {
+  color: #fff;
+  transition-delay: 0s;
+}
+
+/* 父级 ul 上挂 .s4-nav-has-active 时, 非选中兄弟项整体偏暗,
+   让 active 项的"白"在视觉上相对更亮 */
+.s4-nav-has-active .s4-link:not(.is-active) .s4-label {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.s4-nav-has-active .s4-link:not(.is-active) .s4-index {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* hover / focus 时把"被压暗"的非选中项重新拉回纯白,
+   原 .s4-link:hover 规则会被上面更高特异性的 dim 规则盖掉,
+   所以这里需要一组同前缀的 hover 规则把它救回来.
+   leader (虚线) 的 hover 规则不带颜色, 特异性已足够, 无需重写. */
+.s4-nav-has-active .s4-link:not(.is-active):hover .s4-label,
+.s4-nav-has-active .s4-link:not(.is-active):focus-visible .s4-label {
+  color: #fff;
+}
+
+.s4-nav-has-active .s4-link:not(.is-active):hover .s4-index,
+.s4-nav-has-active .s4-link:not(.is-active):focus-visible .s4-index {
+  color: #fff;
+  transition-delay: 0.3s;
+}
+
+/* ============================================================
+   浅色背景配色: 在白底 section (例如 Credmex 产品构建) 内复用
+   同一套 docked nav, 仅替换文字 / 数字 / leader 颜色为深色.
+   通过 .s4-nav-light 父级类切换, 全部规则带颜色过渡, 跨 section
+   滚动时颜色平滑切换.
+   ============================================================ */
+.s4-nav-light .s4-link {
+  color: #050505;
+}
+
+.s4-nav-light .s4-link .s4-label {
+  color: #050505;
+}
+
+.s4-nav-light .s4-link .s4-index {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.s4-nav-light .s4-link .s4-leader::after {
+  background-image: linear-gradient(
+    270deg,
+    rgba(0, 0, 0, 0.65) 1px,
+    transparent 1px
+  );
+}
+
+.s4-nav-light .s4-link:hover .s4-index,
+.s4-nav-light .s4-link:focus-visible .s4-index {
+  color: #050505;
+}
+
+.s4-nav-light .s4-link.is-active .s4-label {
+  color: #050505;
+  text-decoration-color: rgba(0, 0, 0, 0.55);
+}
+
+.s4-nav-light .s4-link.is-active .s4-index {
+  color: #050505;
+}
+
+.s4-nav-light.s4-nav-has-active .s4-link:not(.is-active) .s4-label {
+  color: rgba(0, 0, 0, 0.42);
+}
+
+.s4-nav-light.s4-nav-has-active .s4-link:not(.is-active) .s4-index {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.s4-nav-light.s4-nav-has-active .s4-link:not(.is-active):hover .s4-label,
+.s4-nav-light.s4-nav-has-active .s4-link:not(.is-active):focus-visible .s4-label {
+  color: #050505;
+}
+
+.s4-nav-light.s4-nav-has-active .s4-link:not(.is-active):hover .s4-index,
+.s4-nav-light.s4-nav-has-active .s4-link:not(.is-active):focus-visible .s4-index {
+  color: #050505;
+  transition-delay: 0.3s;
+}
+
+/* Login card hover effect (Paste App style) */
+.login-card-hover:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* CredmexSection BrandColorText 翻牌动画 (随 key=colorIdx remount 自动重播):
+   旧色上滑出 + 新色从下滑入, 取代 effect 内同步 setState 触发 transition 的写法 */
+@keyframes credmex-brand-flip-out {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+@keyframes credmex-brand-flip-in {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* ============================================================
+   Joby Timeline Intro — 从 jobyaviation.com/company 源码直接搬运
+   CSS 类名从 SectionTimeline-module → joby-tl- 前缀
+   ============================================================ */
+
+/* outerWrapper */
+.joby-tl-outer {
+  --exit-radius: 0px;
+  background-color: #f5f4df; /* 首屏 intro 奶油底色 (深色标题文字配此底) */
+  border-radius: 0 0 var(--exit-radius) var(--exit-radius);
+  /* border-radius + overflow:clip 在 GPU 合成下裁不住合成层 (sticky <video>),
+     退场圆角外侧会露出未裁切的视频 → 发灰穿帮。clip-path 能可靠裁切合成层,
+     与圆角同步收角。 */
+  clip-path: inset(0 round 0 0 var(--exit-radius) var(--exit-radius));
+  display: grid;
+  position: relative;
+  overflow: clip;
+  will-change: border-radius;
+}
+
+/* background: z-index:2, sticky。出场圆角交给 outer 统一裁切，避免双重 mask 错位 */
+.joby-tl-background {
+  z-index: 2;
+  pointer-events: none;
+  grid-area: 1 / 1;
+  width: 100vw;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+/* videoLayer: 背景视频叠在 imageSlider 之上, 同一个 sticky 视口区域
+   Intro 滚到 ~89% 时第 1 段视频淡入覆盖最后一张图片
+   后续各段由 Breakthroughs 进度切换 */
+.joby-tl-videoLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1; /* above imageSlider within .joby-tl-background */
+}
+.joby-tl-videoItem {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  /* Joby 源码：t.add(() => { S[i].style.opacity = "1/0" }) — 无 transition, 瞬间硬切 */
+}
+.joby-tl-videoItem video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* imageSlider: CSS 变量驱动 transform + borderRadius */
+.joby-tl-imageSlider {
+  --scaleX: 0.0001;
+  --scaleY: 0.2;
+  --start-radius: 20px;
+  --mid-radius: 180px;
+  --border-end: 1;
+  --radius: calc((var(--start-radius) + var(--mid-radius) * var(--scaleX)) * var(--border-end));
+  opacity: 0;
+  will-change: transform;
+  width: 100%;
+  height: 100%;
+  transform: scale3d(var(--scaleX), var(--scaleY), 1);
+  border-radius: calc(var(--radius) / var(--scaleX)) / calc(var(--radius) / var(--scaleY));
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+/* imageSliderScale: 反向缩放让图片保持原始比例 */
+.joby-tl-imageSliderScale {
+  transform-origin: 50%;
+  width: 100%;
+  height: 100%;
+  transform: scale3d(calc(1 / var(--scaleX)), calc(1 / var(--scaleY)), 1);
+  will-change: transform;
+  position: relative;
+}
+
+/* imageSliderItem */
+.joby-tl-imageSliderItem {
+  width: 100%;
+  height: 100%;
+  transform: scale3d(calc(0.5 + 0.5 * var(--scaleX)), calc(0.5 + 0.5 * var(--scaleX)), 1);
+  will-change: transform, opacity;
+  opacity: 0;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.joby-tl-imageSliderItem:first-child {
+  opacity: 1;
+  display: block;
+}
+
+.joby-tl-imageSliderItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* introContent: z-index:1 */
+.joby-tl-introContent {
+  z-index: 1;
+  grid-area: 1 / 1;
+  position: relative;
+}
+
+/* timelineContent: 跟 background/introContent 是 outer 的子元素，
+   Joby 原版只给 z-index 和 position，不指定 grid-area，
+   隐式落到 grid 第二行，z-index:3 在 background(2) 之上 */
+.joby-tl-outer > .jtc-timelineContent {
+  z-index: 3;
+  position: relative;
+}
+
+/* stickyWrapper: 撑出滚动高度
+   19 张图片 + 标题动画 + 缓冲, 需要足够的滚动距离让每张图片有展示时间.
+   原 200lvh 平均每张图只有 ~10vh, 滚到 ~180vh 时 jtc-timelineContent
+   已进入视口触发 header 1 动画. 改为 400lvh 让 Intro 完全结束 (含末尾
+   缓冲) 后, 下一模块才进入视口. */
+.joby-tl-stickyWrapper {
+  height: 340lvh;
+  width: 100%;
+  position: relative;
+}
+
+/* stickyElement: 粘在视口顶部 */
+.joby-tl-stickyElement {
+  height: fit-content;
+  position: sticky;
+  top: 0;
+}
+
+/* wrapperIntro: absolute 全屏, 作为标题和坐标的定位容器 */
+.joby-tl-wrapperIntro {
+  height: 100vh;
+  height: 100lvh;
+  padding: 2.5rem;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+}
+
+/* introLabelLeft / introLabelRight */
+.joby-tl-introLabelLeft,
+.joby-tl-introLabelRight {
+  position: absolute;
+  font-size: 0.75rem;
+  font-weight: 450;
+  letter-spacing: -0.015rem;
+  line-height: 120%;
+  color: #0c0c0e;
+  top: 1rem;
+  will-change: opacity;
+  opacity: 0;
+  font-family: var(--font-sans);
+}
+
+.joby-tl-introLabelLeft {
+  right: calc(50% + 1.406rem);
+}
+
+.joby-tl-introLabelRight {
+  left: calc(50% + 1.406rem);
+}
+
+/* titleLeft */
+.joby-tl-titleLeft {
+  --offset: 0px;
+  --progress: 0;
+  white-space: nowrap;
+  text-align: right;
+  width: fit-content;
+  padding-right: 0.469rem;
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%) translate(50vw);
+}
+
+.joby-tl-titleLeft h2 {
+  white-space: nowrap;
+}
+
+.joby-tl-titleLeft .joby-tl-innerTitle {
+  transform-origin: 0;
+  transform:
+    translateX(calc(var(--offset) * var(--progress)))
+    translateX(calc(2.5rem * var(--progress)))
+    scale(calc(1 - 0.5 * var(--progress)));
+  will-change: transform;
+}
+
+/* titleRight */
+.joby-tl-titleRight {
+  --offset: 0px;
+  --progress: 0;
+  text-align: right;
+  width: fit-content;
+  padding-left: 0.469rem;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%) translate(-50vw);
+}
+
+.joby-tl-titleRight .joby-tl-innerTitle {
+  transform-origin: 100%;
+  will-change: transform;
+  transform:
+    translateX(calc(var(--offset) * var(--progress)))
+    translateX(calc(-2.5rem * var(--progress)))
+    scale(calc(1 - 0.3 * var(--progress)));
+}
+
+.joby-tl-titleRight h2 {
+  animation-delay: 0.12s;
+}
+
+/* innerTitle */
+.joby-tl-innerTitle {
+  will-change: transform;
+  width: fit-content;
+  height: fit-content;
+}
+
+.joby-tl-innerTitle h2 {
+  opacity: 0;
+  transform: translateY(1.2rem);
+  white-space: nowrap;
+  font-size: 4rem;
+  font-weight: 550;
+  line-height: 100%;
+  letter-spacing: -0.12rem;
+  color: #0c0c0e;
+  margin: 0;
+  font-family: var(--font-sans);
+}
+
+.joby-tl-outer[data-intro-ready="true"] .joby-tl-innerTitle h2 {
+  animation: joby-tl-title-enter 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes joby-tl-title-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1.2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* titleRightReplace */
+.joby-tl-titleRightReplace {
+  visibility: hidden;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+/* ---- Mobile (≤768px) ---- */
+@media (max-width: 768px) {
+  .joby-tl-stickyWrapper {
+    height: 390lvh;
+  }
+
+  .joby-tl-wrapperIntro {
+    padding: 1rem;
+  }
+
+  .joby-tl-imageSlider {
+    --mid-radius: 64px;
+    --scaleY: 0;
+  }
+
+  .joby-tl-introLabelLeft,
+  .joby-tl-introLabelRight {
+    font-size: 0.625rem;
+    letter-spacing: -0.0125rem;
+  }
+
+  .joby-tl-innerTitle h2 {
+    font-size: 2rem;
+    letter-spacing: -0.06rem;
+  }
+
+  .joby-tl-titleLeft {
+    top: 50%;
+    left: 50%;
+    right: unset;
+    padding-right: 0;
+    transform: translate(-50%) translateY(-100%);
+  }
+
+  .joby-tl-titleLeft .joby-tl-innerTitle {
+    transform-origin: top;
+    transform:
+      translateY(calc((-50dvh + 2.5rem) * var(--progress)))
+      scale(calc(1 - 0.25 * var(--progress)));
+  }
+
+  .joby-tl-titleRight {
+    top: 50%;
+    left: 50%;
+    right: unset;
+    padding-left: 0;
+    transform: translate(-50%) translateY(100%);
+  }
+
+  .joby-tl-titleRight .joby-tl-innerTitle {
+    transform-origin: 50%;
+    transform:
+      translateY(calc((50dvh - 3.75rem) * var(--progress)))
+      scale(calc(1 - 0.3 * var(--progress)));
+  }
+
+  .joby-tl-titleRightReplace {
+    right: unset;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* ---- Tablet (768–1024) ---- */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .joby-tl-imageSlider {
+    --mid-radius: 64px;
+  }
+
+  .joby-tl-innerTitle h2 {
+    font-size: 3rem;
+    letter-spacing: -0.09rem;
+  }
+}
+
+/* =============================================================
+   JobyTimelineContent – CSS 严格从 Joby 源码逐条搬运
+   Joby 10px rem → 项目 16px rem (× 0.625)
+   CSS 变量使用 Joby 的全局变量名，在组件 wrapper 上定义
+   ============================================================= */
+
+/* --- 全局变量（Joby :root 中定义的，组件内覆盖） --- */
+.jtc-timelineContent {
+  --grid-columns: 16;
+  --grid-columns-mobile: 6;
+  --gutter-width: 1rem;         /* 1.6rem @10px */
+  --gutter-width-mobile: 0.5rem; /* 0.8rem @10px */
+  --base-padding: 2.5rem;       /* 4rem @10px */
+  --color-white: #f5f4df;
+  --ease-snappy: cubic-bezier(0.2, 0.21, 0, 1);
+  --grid-column-width: calc(
+    (100vw - 2 * var(--base-padding) - (var(--grid-columns) - 1) * var(--gutter-width)) /
+    var(--grid-columns)
+  );
+
+  z-index: 3;
+  position: relative;
+}
+
+/* --- SectionWrapper --- */
+.jtc-sectionWrapper { width: 100%; position: relative; contain: layout style paint }
+
+/* Fixed intro header overlay: draw the first line at viewport center, then hand off
+   to the inline header when it reaches the same position. */
+.jtc-fixedIntroHeader {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  left: 0;
+  z-index: 4;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  will-change: opacity, transform;
+}
+
+.jtc-fixedIntroHeader .jtc-introTimelineWrapper {
+  box-sizing: border-box;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: 0 var(--gutter-width);
+  padding: 0 var(--base-padding);
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* --- StickyJSElement (intro header scrub) --- */
+.jtc-stickyWrapperJS { height: var(--sticky-height-desktop); width: 100%; position: relative }
+.jtc-stickyElementJS {
+  left: 0;
+  width: 100%;
+  height: fit-content;
+  opacity: 0;
+  position: fixed;
+  z-index: 4;
+}
+.jtc-stickyTopJS { top: var(--sticky-offset, 0px) }
+
+/* --- StickyCSSElement --- */
+.jtc-stickyWrapperCSS { height: var(--sticky-height-desktop); width: 100%; position: relative }
+.jtc-stickyElementCSS { height: fit-content; position: sticky }
+.jtc-stickyTopCSS { top: var(--sticky-offset, 0px) }
+
+/* --- timelineWrapper (16-col grid) --- */
+.jtc-timelineWrapper {
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: 0px var(--gutter-width);
+  padding: 0 var(--base-padding);
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  position: relative;
+  color: var(--color-white);
+  grid-auto-rows: min-content;
+  height: fit-content;
+}
+
+/* --- stickyWrapper (grid child) --- */
+.jtc-stickyWrapper { grid-column: 1 / span 16 }
+
+/* --- introTimelineWrapper --- */
+.jtc-introTimelineWrapper {
+  grid-column: 1 / span 16;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: 0px var(--gutter-width);
+  padding: 0;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-auto-rows: min-content;
+}
+
+/* --- timelinePastIntro --- */
+.jtc-timelinePastIntro {
+  grid-column: 1 / span 16;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: 0px var(--gutter-width);
+  padding: 0;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-auto-rows: min-content;
+  row-gap: 0;
+}
+
+.jtc-fixedIntroHeader .jtc-animatedText {
+  opacity: 1;
+}
+
+/* --- timelineHeader --- */
+.jtc-timelineHeader {
+  --progress: 0;
+  grid-column: 1 / span 16;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: 0px var(--gutter-width);
+  padding: 0;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  position: relative;
+  grid-auto-rows: min-content;
+  padding-top: 0.75rem; /* 1.2rem @10px */
+}
+
+.jtc-timelineHeader::before {
+  content: "";
+  background-color: var(--color-white);
+  width: 100%;
+  height: 1px;
+  transform: scaleX(var(--progress));
+  will-change: transform;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.jtc-timelineHeaderAuto::before {
+  transition: transform 0.8s var(--ease-snappy);
+}
+
+/* --- Header columns --- */
+.jtc-headerColumn1 { grid-column: 1 / span 2 }
+.jtc-headerColumn2 { grid-column: 3 / span 5 }
+.jtc-headerColumn2Bodies { flex-direction: column; grid-column: 3 / span 5; gap: 2rem; display: flex } /* gap: 3.2rem @10px */
+.jtc-headerColumn3 { grid-column: 8 / span 3 }
+.jtc-headerColumn3Intro { grid-column: 8 / span 2 }
+.jtc-headerColumnDown { flex-direction: column; grid-column: 3 / span 4; gap: 1.375rem; padding-bottom: 2rem; display: flex } /* gap:2.2rem pb:3.2rem @10px */
+.jtc-headerColumn4_11 { flex-direction: column; grid-column: 11 / span 5; gap: 2rem; display: flex } /* gap:3.2rem @10px */
+.jtc-headerColumn4 { flex-direction: column; grid-column: 12 / span 4; gap: 2rem; display: flex } /* gap:3.2rem @10px */
+.jtc-headerTimelineDesc { gap: 1.5rem } /* 2.4rem @10px */
+.jtc-headerColumnLast { grid-column: 12 / span 5; justify-self: end }
+.jtc-row1 { grid-row: 1 }
+
+/* --- Typography (直接从 Joby fAfHiq 搬运，rem 已转换) --- */
+.jtc-captionSmall { font-weight: 450; letter-spacing: -0.015rem; font-size: 0.75rem; line-height: 120% } /* 1.2rem @10px */
+.jtc-subheading2 { font-weight: 500; letter-spacing: -0.04rem; font-size: 2rem; font-style: normal; line-height: 110%; margin: 0 } /* 3.2rem @10px */
+.jtc-body2 { font-weight: 400; letter-spacing: -0.009rem; font-size: 0.875rem; line-height: 130%; margin: 0 } /* 1.4rem @10px */
+.jtc-timelineText { font-weight: 450; letter-spacing: -0.011rem; font-size: 1.125rem; font-style: normal; line-height: 130% } /* 1.8rem @10px */
+.jtc-titleTimeline { font-weight: 500; letter-spacing: -0.06rem; font-size: 3rem; line-height: 97% } /* 4.8rem @10px */
+
+/* --- AnimatedText (Joby original: opacity:0; JS sets opacity:1 after split) --- */
+.jtc-animatedText { opacity: 0; display: block }
+
+/* Inside timelineHeader5: text is always visible (not observed by IO) */
+.jtc-timelineHeader5 .jtc-animatedText { opacity: 1 }
+
+/* --- ScrollAnimatedTitle (per-char color-mix) --- */
+.jtc-scrollAnimatedTitle { --color-text-initial: #f5f4df33; --color-text: var(--color-white); opacity: 0 }
+.jtc-scrollAnimatedTitle .jtc-char { --progress: 0; will-change: transform, opacity; color: color-mix(in srgb, var(--color-text) calc(var(--progress) * 100%), var(--color-text-initial)) }
+
+/* --- Timeline title spacing --- */
+.jtc-timelineTitle { flex-direction: column; grid-column: 1 / span 14; gap: 3.625rem; margin-bottom: 4rem; display: flex; position: relative } /* gap:5.8rem mb:6.4rem @10px */
+.jtc-timelineTitle1 { margin-top: 7rem }
+.jtc-timelineTitle2 { margin-top: 27.5rem }   /* 44rem @10px */
+.jtc-timelineTitle3 { margin-top: 27.5rem }   /* 44rem @10px */
+
+/* --- timelineHeader4 (transition) --- */
+.jtc-timelineHeader4 { padding-bottom: 35rem }
+
+/* --- timelineSticky --- */
+.jtc-timelineSticky { grid-column: 1 / span 16 }
+
+/* --- timelineHeader5 (sticky header) — desktop: no special overrides --- */
+.jtc-timelineHeader5 { --progress: 1 }
+
+/* --- Year navigation --- */
+.jtc-headerColumnYears { flex-direction: column; grid-area: 1 / 3 / auto / span 5; display: flex }
+.jtc-headerColumnYears h6 { padding: 0 0 0.625rem } /* 1rem @10px */
+.jtc-yearItem {
+  --translateItem: 0;
+  --topTranslate: 0;
+  opacity: 0.2;
+  transition: opacity 0.3s var(--ease-snappy), transform 0.3s var(--ease-snappy);
+  will-change: transform, opacity;
+  transform: translateY(calc(var(--translateItem) * -100% + var(--topTranslate) * -1.25rem)); /* -2rem @10px */
+}
+.jtc-yearItemActive { opacity: 1 }
+
+/* --- Month navigation --- */
+.jtc-headerColumnMonths { flex-direction: column; grid-area: 1 / 5 / auto / span 2; display: flex }
+.jtc-monthsGroup { justify-content: center; gap: 0.625rem; display: none } /* 1rem @10px */
+.jtc-monthsGroupActive { display: flex }
+.jtc-monthItem { opacity: 0.4; transition: opacity 0.3s var(--ease-snappy); cursor: default }
+.jtc-monthItemActive { opacity: 1 }
+
+/* --- Event title/desc toggle --- */
+.jtc-sticktTimelineTitle, .jtc-sticktTimelineDescription { display: none }
+.jtc-sticktTimelineTitleActive, .jtc-sticktTimelineDescriptionActive { display: block }
+
+/* --- Desktop visibility (Joby: @media min-width:768px) --- */
+@media (min-width: 768px) {
+  .jtc-hideDesktop { display: none }
+}
+
+/* =============================================================
+   Mobile (≤768px)
+   ============================================================= */
+@media (max-width: 768px) {
+  .jtc-timelineContent { --base-padding: 1rem } /* 1.6rem @10px */
+
+  .jtc-stickyWrapperJS { height: var(--sticky-height-mobile) }
+  .jtc-fixedIntroHeader { top: 50%; transform: translateY(-50%) }
+  .jtc-fixedIntroHeader .jtc-introTimelineWrapper {
+    grid-template-columns: repeat(var(--grid-columns-mobile), 1fr);
+    gap: var(--gutter-width-mobile);
+    padding: 0 var(--base-padding);
+  }
+  .jtc-stickyTopJS { top: var(--sticky-offset-mobile) }
+  .jtc-stickyWrapperCSS { height: var(--sticky-height-mobile) }
+  .jtc-stickyTopCSS { top: var(--sticky-offset-mobile) }
+
+  .jtc-timelineWrapper { grid-template-columns: repeat(var(--grid-columns-mobile), 1fr); gap: var(--gutter-width-mobile) }
+  .jtc-stickyWrapper { grid-column: 1 / span 6 }
+
+  .jtc-introTimelineWrapper { grid-template-columns: repeat(var(--grid-columns-mobile), 1fr); gap: var(--gutter-width-mobile); padding: 0; grid-column: 1 / span 6 }
+  .jtc-timelinePastIntro { grid-template-columns: repeat(var(--grid-columns-mobile), 1fr); gap: var(--gutter-width-mobile); padding: 0; grid-column: 1 / span 6 }
+
+  .jtc-timelineHeader { grid-template-columns: repeat(var(--grid-columns-mobile), 1fr); gap: var(--gutter-width-mobile); padding: 0; grid-column: 1 / span 6 }
+  .jtc-timelineHeader::before { left: calc(var(--base-padding) * -1); width: calc(100% + var(--base-padding) * 2) }
+
+  .jtc-headerColumn2 { grid-column: 1 / span 2; justify-self: center }
+  .jtc-headerColumn2Bodies { grid-column: 3 / span 2; justify-self: center }
+  .jtc-headerColumn3 { grid-area: 1 / 3 / auto / span 2; justify-self: center }
+  .jtc-headerColumn3Intro { grid-area: 1 / 3 / auto / span 2; justify-self: center }
+  .jtc-headerColumn4_11 { grid-area: 1 / 4 / auto / span 2; justify-self: end }
+  .jtc-headerColumn4 { grid-area: 1 / 4 / auto / span 2; justify-self: end }
+  .jtc-headerTimelineDesc { gap: 1.5rem } /* 2.4rem @10px */
+  .jtc-headerColumnLast { grid-area: 1 / 5 / auto / span 2; justify-self: end }
+  .jtc-headerMobileLast { grid-column: 5 / span 2; justify-self: end }
+  .jtc-headerMobileBodies { grid-area: 2 / 3 / auto / span 4; justify-self: start; margin-top: 2rem } /* 3.2rem @10px */
+
+  .jtc-timelineTitle { grid-column: 1 / span 6 }
+  .jtc-timelineTitle1 { gap: 1.3125rem; margin-top: 19.6875rem } /* 2.1rem, 31.5rem @10px */
+  .jtc-timelineTitle2 { margin-top: 32.125rem; margin-bottom: 15.875rem } /* 51.4rem, 25.4rem @10px */
+  .jtc-timelineTitle3 { margin-top: 32.125rem; margin-bottom: 27.625rem } /* 51.4rem, 44.2rem @10px */
+
+  .jtc-titleTimeline { letter-spacing: -0.025rem; font-size: 1.25rem; line-height: 100% } /* 2rem @10px */
+  .jtc-timelineText { letter-spacing: -0.009rem; font-size: 0.875rem; line-height: 120% } /* 1.4rem @10px */
+  .jtc-captionSmall { letter-spacing: -0.0125rem; font-size: 0.625rem; line-height: 120% } /* 1rem @10px */
+  .jtc-subheading2 { letter-spacing: -0.03rem; font-size: 1.5rem; line-height: 110% } /* 2.4rem @10px */
+  .jtc-body2 { letter-spacing: -0.009rem; font-size: 0.875rem; line-height: 130% }
+
+  .jtc-timelineHeader4 { display: none }
+  .jtc-timelineHeader5 { padding-bottom: 16.875rem; position: relative } /* 27rem @10px */
+  .jtc-timelineHeader5 { padding-bottom: 4.6875rem } /* 7.5rem @10px override */
+  .jtc-timelineHeader5 .jtc-headerColumn1 { position: absolute; top: -50vh; left: 0; padding-top: 0.75rem }
+  .jtc-timelineHeader5 .jtc-headerColumn1::before { content: ""; top: 0; left: calc(var(--base-padding) * -1); background-color: var(--color-white); width: 100vw; height: 1px; position: absolute }
+  .jtc-timelineHeader5 .jtc-headerColumn3 { width: 14.0625rem; position: absolute; top: -2.1875rem; left: 0 } /* 22.5rem, -3.5rem @10px */
+  .jtc-timelineHeader5 .jtc-headerColumn4 { grid-column: 3 / span 4; justify-self: start }
+
+  .jtc-timelineSticky { grid-column: 1 / span 6 }
+
+  .jtc-headerColumnYears { grid-column: 1 / span 1 }
+  .jtc-headerColumnYears h6 { padding: 0 0 0.5rem; font-size: 0.875rem } /* 0.8rem, 1.4rem @10px */
+  .jtc-yearItem { transform: translateY(calc(var(--translateItem) * -100% + var(--topTranslate) * -1.125rem)) } /* -1.8rem @10px */
+
+  .jtc-headerColumnMonths { grid-column: 2 / span 1 }
+  .jtc-monthsGroup { flex-direction: column; gap: 0.5rem; padding: 0 0 0.5rem } /* 0.8rem @10px */
+
+  .jtc-hideMobile { display: none }
+}
+
+/* Tablet (769–1024) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .jtc-stickyWrapperCSS { height: var(--sticky-height-tablet) }
+}
+
+/* =============================================================
+   Joby Technology / Safety slider copy
+   Source structure: section#safety-in > SectionSafetySlider
+   ============================================================= */
+@font-face {
+  font-family: "JobySafetyDisplay";
+  src: url("https://www.jobyaviation.com/_next/static/media/JobySans_Display_Variable-s.p.cdf48502.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JobySafetyText";
+  src: url("https://www.jobyaviation.com/_next/static/media/JobySans_Text_Variable-s.p.5174080c.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+.jobySafetySectionWrapper {
+  width: 100%;
+  position: relative;
+  contain: layout style paint;
+}
+
+.jobySafetySection {
+  --grid-columns: 16;
+  --gutter-width: 16px;
+  --base-padding: 40px;
+  --color-white: #f5f4df;
+  --color-black: #0e1620;
+  --grid-column-width: calc(
+    (100vw - 2 * var(--base-padding) - (var(--grid-columns) - 1) * var(--gutter-width)) /
+    var(--grid-columns)
+  );
+
+  width: 100%;
+  min-height: 100dvh;
+  padding-top: 80px;
+  padding-bottom: 20px;
+  background: var(--color-white);
+  color: var(--color-black);
+  font-family: var(--font-sans);
+  position: relative;
+}
+
+.jobySafetyStickyWrapper {
+  width: 100%;
+  height: 1350vh; /* 滚动步幅: 越大每张卡片切换需滚动越长 */
+  position: relative;
+}
+
+.jobySafetyStickyElement {
+  height: fit-content;
+  position: sticky;
+}
+
+.jobySafetyStickyTop {
+  top: 0;
+}
+
+.jobySafetySlidesContainer {
+  --animate-in: 0;
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+  gap: 0 var(--gutter-width);
+  width: 100%;
+  height: 100lvh;
+  margin: 0 auto;
+  padding: 120px var(--base-padding);
+  display: grid;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.jobySafetySlidesContainer::before {
+  content: "";
+  top: 120px;
+  right: calc(var(--gutter-width) * 4 + var(--grid-column-width) * 4 + var(--base-padding) + 8px);
+  width: 1px;
+  height: calc(100% - 240px);
+  background-color: var(--color-black);
+  transform-origin: top;
+  transform: scaleY(var(--animate-in));
+  will-change: transform;
+  position: absolute;
+}
+
+.jobySafetyImageSlider {
+  --animate-to-position: 0;
+  pointer-events: none;
+  z-index: 2;
+  width: calc(100% - 40px + var(--gutter-width));
+  will-change: transform;
+  background-color: #ecfbb6;
+  border-radius: 20px;
+  grid-area: 1 / 1 / auto / span 9;
+  position: relative;
+  left: 40px;
+  overflow: hidden;
+}
+
+.jobySafetyImageSliderMask,
+.jobySafetyImageWrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.jobySafetyImageSliderInner {
+  --progress: 0;
+  --zoom-progress: 0;
+  --scale-progress: calc(1 - var(--progress));
+  --scale-progress-safe: 1;
+  --end: 0;
+  --reverse-zoom: calc((1 - var(--zoom-progress)) * 0.1);
+  transform-origin: top;
+  width: 100%;
+  height: 100%;
+  transform: scale3d(1, var(--scale-progress), 1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.jobySafetyImageSliderInner:first-child { z-index: 6 }
+.jobySafetyImageSliderInner:nth-child(2) { z-index: 5 }
+.jobySafetyImageSliderInner:nth-child(3) { z-index: 4 }
+.jobySafetyImageSliderInner:nth-child(4) { z-index: 3 }
+.jobySafetyImageSliderInner:nth-child(5) { z-index: 2 }
+.jobySafetyImageSliderInner:nth-child(6) { z-index: 1 }
+
+.jobySafetyImageSliderInner:last-child {
+  --end: 0;
+  will-change: transform;
+  transform: translateY(calc(50lvh * var(--end)));
+}
+
+.jobySafetyImageSliderScale {
+  transform-origin: top;
+  will-change: transform;
+  width: 100%;
+  height: 100%;
+  transform: scale3d(1, calc(1 / var(--scale-progress-safe)), 1);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.jobySafetyImageSliderInnerZoom {
+  transform-origin: 50%;
+  will-change: transform;
+  width: 100%;
+  height: 100%;
+  background-color: #ecfbb6;
+  transform:
+    translate3d(0, calc(var(--progress) * -10%), 0)
+    scale(calc(1.05 + var(--reverse-zoom)))
+    scale(calc(1 - 0.05 * var(--progress)));
+}
+
+.jobySafetyImageSliderInner:last-child .jobySafetyImageSliderInnerZoom {
+  transform-origin: 50%;
+  transform: scale(calc(1 + var(--reverse-zoom))) scale(calc(1 - 0.1 * var(--progress)));
+}
+
+.jobySafetyImage {
+  object-fit: contain;
+  object-position: center;
+  width: auto;
+  height: auto;
+  max-width: 88%;
+  max-height: 88%;
+  display: block;
+  user-select: none;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.jobySafetyImageSliderInnerTag {
+  position: absolute;
+  bottom: 32px;
+  left: 32px;
+}
+
+.jobySafetyLabel {
+  grid-area: 1 / 12 / auto / span 1;
+  justify-self: end;
+  margin-right: 32px;
+  height: fit-content;
+}
+
+.jobySafetyImageTagWrapperMobile {
+  visibility: hidden;
+  display: none;
+}
+
+.jobySafetyCaption {
+  font-family: var(--font-sans);
+  letter-spacing: var(--ls-normal);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  line-height: var(--lh-snug);
+  white-space: nowrap;
+}
+
+.jobySafetyAnimatedText {
+  display: block;
+  will-change: transform, opacity;
+}
+
+.jobySafetyContentWrapper {
+  visibility: hidden;
+  will-change: transform, opacity;
+  flex-direction: column;
+  grid-area: 1 / 13 / auto / span 4;
+  justify-content: space-between;
+  align-self: end;
+  gap: 32px;
+  height: 100%;
+  display: flex;
+  position: relative;
+}
+
+.jobySafetyTextContainer {
+  width: 100%;
+  position: relative;
+}
+
+.jobySafetyHeading4 {
+  font-family: var(--font-sans);
+  letter-spacing: var(--ls-tight);
+  font-size: 40px; /* 对齐"额度推荐"标题字号 */
+  font-weight: 600;
+  line-height: var(--lh-snug);
+  margin: 0;
+}
+
+.jobySafetyHeadingHighlight {
+  display: block;
+  margin-top: 24px; /* 标题与副标题间距 */
+  font-family: var(--font-sans);
+  letter-spacing: var(--ls-normal);
+  font-size: var(--text-subtitle);
+  font-weight: 500;
+  line-height: var(--lh-snug);
+}
+
+.jobySafetySubtitleWrapper {
+  flex-direction: column;
+  gap: 38px;
+  max-width: 368px;
+  display: flex;
+  position: relative;
+}
+
+.jobySafetyBody1 {
+  font-family: var(--font-sans);
+  letter-spacing: var(--ls-normal);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  line-height: var(--lh-normal);
+  margin: 0;
+}
+
+.jobySafetyPagination {
+  bottom: 120px;
+  left: var(--base-padding);
+  z-index: 4;
+  pointer-events: none;
+  flex-direction: column;
+  width: 5px;
+  height: 112px;
+  display: flex;
+  position: absolute;
+}
+
+.jobySafetyPaginationItem {
+  --progress: 0;
+  --animate-in: 0;
+  --animate-out: 0;
+  width: 5px;
+  height: 5px;
+  height: calc(5px + 40px * var(--animate-in) * (1 - var(--animate-out)));
+  transform: translateY(calc(-40px * var(--animate-out)));
+  will-change: transform;
+  position: absolute;
+}
+
+.jobySafetyPaginationItem::before {
+  content: "";
+  background-color: var(--color-black);
+  opacity: 0.2;
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.jobySafetyPaginationItem::after {
+  content: "";
+  width: 100%;
+  height: calc(5px + 40px * var(--progress) * (1 - var(--animate-out)));
+  background-color: var(--color-black);
+  opacity: calc(min(var(--progress), 0.1) * 10 * (1 - var(--animate-out)));
+  border-radius: 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.jobySafetyPaginationItem:first-child { bottom: 80% }
+.jobySafetyPaginationItem:nth-child(2) { bottom: 60% }
+.jobySafetyPaginationItem:nth-child(3) { bottom: 40% }
+.jobySafetyPaginationItem:nth-child(4) { bottom: 20% }
+.jobySafetyPaginationItem:nth-child(5) { bottom: 0 }
+
+@media (min-width: 1536px) {
+  .jobySafetySection {
+    --gutter-width: 20px;
+    --base-padding: 64px;
+  }
+
+  .jobySafetyImageSlider {
+    left: 48px;
+    width: calc(100% - 48px + var(--gutter-width));
+    border-radius: 24px;
+  }
+
+  .jobySafetySubtitleWrapper {
+    max-width: 430px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1279px) {
+  .jobySafetyLabel {
+    grid-column: 11 / span 1;
+    justify-self: end;
+    margin-right: 24px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .jobySafetySlidesContainer::before {
+    right: calc(var(--gutter-width) * 5 + var(--grid-column-width) * 5 + var(--base-padding) + 8px);
+  }
+
+  .jobySafetyContentWrapper {
+    grid-column: 12 / span 5;
+  }
+
+  .jobySafetyLabel {
+    grid-column: 11 / span 1;
+    margin-right: 24px;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .jobySafetySection {
+    --grid-columns: 6;
+    --gutter-width: 8px;
+    --base-padding: 16px;
+    padding-top: 20px;
+  }
+
+  .jobySafetyStickyWrapper {
+    height: 1350lvh;
+  }
+
+  .jobySafetySlidesContainer {
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    gap: var(--gutter-width);
+    grid-auto-rows: min-content;
+    align-content: space-between;
+    height: 100lvh;
+    padding-top: 0;
+    padding-bottom: 40px;
+  }
+
+  .jobySafetyLabel,
+  .jobySafetyImageSliderInnerTag {
+    display: none;
+  }
+
+  .jobySafetySlidesContainer::before {
+    display: none;
+  }
+
+  .jobySafetyImageTagWrapperMobile {
+    top: calc(49lvh + 24px);
+    left: var(--base-padding);
+    z-index: 1;
+    opacity: var(--animate-in);
+    display: flex;
+    position: absolute;
+  }
+
+  .jobySafetyImageSlider {
+    --scale: calc(0.5 + 0.5 * var(--animate-in));
+    --scaleY: calc(1 + 0.8 * (1 - var(--animate-in)));
+    border-radius:
+      calc((1 - var(--animate-in)) * 32px)
+      calc((1 - var(--animate-in)) * 32px)
+      calc(32px + 32px * var(--animate-in))
+      calc(32px + 32px * var(--animate-in));
+    transform-origin: top;
+    transform: translateY(calc(90px * (1 - var(--animate-in)))) scale(var(--scale)) scaleY(var(--scaleY));
+    left: calc(var(--base-padding) * -1);
+    width: calc(100% + var(--base-padding) * 2);
+    grid-area: 1 / 1 / auto / span 6;
+    height: 49lvh;
+  }
+
+  .jobySafetyImageSliderMask {
+    transform: scale(calc(1 + 0.2 * (1 - var(--animate-in)))) scale(calc(1 / var(--scale))) scaleY(calc(1 / var(--scaleY)));
+  }
+
+  .jobySafetyImageSliderInner:first-child {
+    transform: translateY(calc(-10lvh * (1 - var(--animate-in)))) scale3d(1, var(--scale-progress), 1);
+  }
+
+  .jobySafetyContentWrapper {
+    grid-area: 2 / 1 / auto / span 6;
+    align-self: end;
+    gap: 24px;
+    height: fit-content;
+    padding-bottom: 0;
+    transform: none !important;
+  }
+
+  .jobySafetySubtitleWrapper {
+    gap: 24px;
+    max-width: 100%;
+  }
+
+  .jobySafetyBody1 {
+    white-space: initial;
+  }
+
+  .jobySafetyPagination {
+    bottom: unset;
+    top: calc(var(--base-padding) * 2);
+  }
+
+  .jobySafetyPaginationItem::before,
+  .jobySafetyPaginationItem::after {
+    background-color: var(--color-white);
+  }
+}
