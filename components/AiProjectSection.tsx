@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useT } from "@/lib/i18n";
 import VibeCodingHero from "@/components/VibeCodingHero";
 
@@ -24,14 +24,83 @@ const CN_FONT = "var(--font-sans)";
 
 export default function AiProjectSection({ id = "ai" }: { id?: string }) {
   const t = useT();
+  const cardRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   const [hint, setHint] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const enter = () => {
     setActive(true);
     setHint(true);
     window.setTimeout(() => setHint(false), 4600);
   };
+
+  const getFsElement = () =>
+    (document.fullscreenElement ||
+      (document as Document & { webkitFullscreenElement?: Element })
+        .webkitFullscreenElement) ??
+    null;
+
+  // 收起: 优先退出原生全屏 (会触发 fullscreenchange 同步 state); 否则关 CSS 回退态。
+  const collapse = useCallback(() => {
+    if (getFsElement()) {
+      const doc = document as Document & { webkitExitFullscreen?: () => void };
+      (doc.exitFullscreen?.() as Promise<void> | undefined)?.catch(() => {});
+      doc.webkitExitFullscreen?.();
+    } else {
+      setExpanded(false);
+    }
+  }, []);
+
+  // 展开: 用原生全屏 API 让卡片进入浏览器"顶层", 盖过导航等一切; 不支持时回退 CSS 固定全屏。
+  const expand = () => {
+    setActive(true);
+    const el = cardRef.current as
+      | (HTMLDivElement & { webkitRequestFullscreen?: () => void })
+      | null;
+    if (!el) {
+      return;
+    }
+    if (el.requestFullscreen) {
+      el.requestFullscreen().catch(() => setExpanded(true));
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    } else {
+      setExpanded(true);
+    }
+  };
+
+  const toggleExpand = () => (expanded ? collapse() : expand());
+
+  // 原生全屏状态变化 (含按 ESC 退出) → 同步 expanded。
+  useEffect(() => {
+    const onFsChange = () => setExpanded(getFsElement() === cardRef.current);
+    document.addEventListener("fullscreenchange", onFsChange);
+    document.addEventListener("webkitfullscreenchange", onFsChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", onFsChange);
+      document.removeEventListener("webkitfullscreenchange", onFsChange);
+    };
+  }, []);
+
+  // CSS 回退全屏 (无原生全屏时): ESC 收起 + 锁定背景滚动。
+  useEffect(() => {
+    if (!expanded) {
+      return;
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        collapse();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [expanded, collapse]);
 
   return (
     <section
@@ -77,23 +146,38 @@ export default function AiProjectSection({ id = "ai" }: { id?: string }) {
         />
       </div>
 
-      {/* 仿窗口卡片 */}
+      {/* 仿窗口卡片 (展开时进入原生全屏/CSS 固定全屏, 复用同一 iframe 不重载) */}
       <div
-        className="relative z-10"
-        style={{
-          marginTop: "clamp(64px, 12vh, 140px)",
-          width: "min(86vw, calc((100vh - 300px) * 16 / 9), 940px)",
-          borderRadius: 18,
-          border: "1px solid rgba(255,255,255,0.12)",
-          background: "rgba(255,255,255,0.03)",
-          boxShadow:
-            "0 40px 120px -30px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.04) inset",
-          overflow: "hidden",
-        }}
+        ref={cardRef}
+        className={expanded ? "flex flex-col" : "relative z-10 flex flex-col"}
+        style={
+          expanded
+            ? {
+                position: "fixed",
+                inset: 0,
+                zIndex: 9999,
+                width: "100vw",
+                height: "100dvh",
+                borderRadius: 0,
+                border: "none",
+                background: "#000000",
+                overflow: "hidden",
+              }
+            : {
+                marginTop: "clamp(64px, 12vh, 140px)",
+                width: "min(86vw, calc((100vh - 300px) * 16 / 9), 940px)",
+                borderRadius: 18,
+                border: "1px solid rgba(255,255,255,0.12)",
+                background: "rgba(255,255,255,0.03)",
+                boxShadow:
+                  "0 40px 120px -30px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.04) inset",
+                overflow: "hidden",
+              }
+        }
       >
-        {/* 顶部 chrome 条 */}
+        {/* 顶部 chrome 条: 三色点承担窗口操作 —— 绿点展开/收起全屏, 红点退出全屏 */}
         <div
-          className="flex items-center"
+          className="relative flex items-center"
           style={{
             height: 44,
             padding: "0 16px",
@@ -102,11 +186,27 @@ export default function AiProjectSection({ id = "ai" }: { id?: string }) {
             backgroundColor: "rgba(255,255,255,0.025)",
           }}
         >
-          <span style={dot("#ff5f57")} />
+          <TrafficDot
+            color="#ff5f57"
+            onClick={collapse}
+            label={t("退出全屏", "Exit fullscreen")}
+            interactive={expanded}
+            glyph="exit"
+          />
           <span style={dot("#febc2e")} />
-          <span style={dot("#28c840")} />
+          <TrafficDot
+            color="#28c840"
+            onClick={toggleExpand}
+            label={
+              expanded
+                ? t("收起全屏", "Exit fullscreen")
+                : t("展开全屏", "Enter fullscreen")
+            }
+            interactive
+            glyph={expanded ? "collapse" : "expand"}
+          />
           <span
-            className="mx-auto inline-flex items-center gap-2"
+            className="pointer-events-none absolute left-1/2 inline-flex -translate-x-1/2 items-center gap-2"
             style={{
               padding: "4px 14px",
               borderRadius: 8,
@@ -114,7 +214,7 @@ export default function AiProjectSection({ id = "ai" }: { id?: string }) {
               color: "rgba(255,255,255,0.55)",
               fontSize: "var(--text-caption)",
               letterSpacing: "0.02em",
-              transform: "translateX(-26px)", // 视觉居中(抵消左侧三点)
+              whiteSpace: "nowrap",
             }}
           >
             <FigmaMark />
@@ -122,8 +222,15 @@ export default function AiProjectSection({ id = "ai" }: { id?: string }) {
           </span>
         </div>
 
-        {/* 演示区 16:9 */}
-        <div className="relative" style={{ aspectRatio: "16 / 9" }}>
+        {/* 演示区: 普通态 16:9; 全屏态填满剩余高度 */}
+        <div
+          className="relative"
+          style={
+            expanded
+              ? { flex: "1 1 auto", minHeight: 0 }
+              : { aspectRatio: "16 / 9" }
+          }
+        >
           <iframe
             src={EMBED_SRC}
             title={t("AI 项目分享", "AI Project Showcase")}
@@ -245,6 +352,85 @@ function CursorClick() {
         stroke={ACCENT}
         strokeWidth="1.6"
         strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+// macOS 风格交通灯点: 悬停时浮现操作符号 (融合全屏控制, 替代独立按钮)。
+function TrafficDot({
+  color,
+  onClick,
+  label,
+  interactive,
+  glyph,
+}: {
+  color: string;
+  onClick: () => void;
+  label: string;
+  interactive: boolean;
+  glyph: "expand" | "collapse" | "exit";
+}) {
+  return (
+    <button
+      type="button"
+      onClick={interactive ? onClick : undefined}
+      aria-label={label}
+      title={label}
+      className="group inline-flex items-center justify-center"
+      style={{
+        width: 12,
+        height: 12,
+        borderRadius: 99,
+        padding: 0,
+        border: "none",
+        backgroundColor: color,
+        cursor: interactive ? "pointer" : "default",
+        flex: "none",
+        lineHeight: 0,
+      }}
+    >
+      {interactive && (
+        <span
+          className="opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+          style={{ display: "inline-flex", color: "rgba(0,0,0,0.6)" }}
+        >
+          <DotGlyph glyph={glyph} />
+        </span>
+      )}
+    </button>
+  );
+}
+
+function DotGlyph({ glyph }: { glyph: "expand" | "collapse" | "exit" }) {
+  if (glyph === "exit") {
+    return (
+      <svg width="8" height="8" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+        <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      </svg>
+    );
+  }
+  if (glyph === "collapse") {
+    return (
+      <svg width="8" height="8" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+        <path
+          d="M6.5 1.5v3.2a.8.8 0 0 1-.8.8H2.5M10 3.5H6.8a.8.8 0 0 0-.8.8V7.5"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+  return (
+    <svg width="8" height="8" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path
+        d="M2 5V2.8a.8.8 0 0 1 .8-.8H5M10 7v2.2a.8.8 0 0 1-.8.8H7"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
