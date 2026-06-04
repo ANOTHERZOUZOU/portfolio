@@ -127,8 +127,8 @@ export default function AiProjectSection({ id = "ai" }: { id?: string }) {
           <iframe
             src={EMBED_SRC}
             title={t("AI 项目分享", "AI Project Showcase")}
-            allowFullScreen
             allow="autoplay; fullscreen; clipboard-read; clipboard-write"
+            loading="lazy"
             className="absolute inset-0 h-full w-full"
             style={{
               border: 0,

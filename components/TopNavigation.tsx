@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useBreakpoint, type BreakpointName } from "@/lib/breakpoints";
 import { NavOverlayMenu, type NavMenuItem } from "@/components/NavOverlayMenu";
 import { useLang, useT } from "@/lib/i18n";
@@ -134,6 +134,8 @@ export function TopNavigation({
         </div>
       </button>
 
+      <ScrollProgress textColor={textColor} fontSize={logoFontSize - 2} topOffset={paddingTop} />
+
       <LanguageToggle textColor={textColor} dividerColor={dividerColor} />
     </motion.header>
 
@@ -143,6 +145,112 @@ export function TopNavigation({
       items={navItems}
     />
     </>
+  );
+}
+
+/* ============================================================
+ * 浏览进度百分比 —— 绝对居中于导航栏, 不挤占左右两端布局。
+ *   进度 = scrollTop / (文档可滚动高度), 监听 scroll 实时更新 (rAF 节流)。
+ *   0% 时显示提示文案 "Slowly scroll down", 一旦开始滑动切换成百分比。
+ *   两态切换: 逐字符错位翻滚 + 模糊渐显 (stagger), 有创意且不抖。
+ *   颜色继承 header 的 mix-blend-difference, 跟随明暗背景自适应。
+ * ============================================================ */
+const PROGRESS_HINT = "Slowly scroll down";
+const PROGRESS_EASE = [0.22, 1, 0.36, 1] as const;
+
+function ScrollProgress({
+  textColor,
+  fontSize,
+  topOffset,
+}: {
+  textColor: string;
+  fontSize: number;
+  topOffset: number;
+}) {
+  const [pct, setPct] = useState(0);
+
+  useEffect(() => {
+    let raf = 0;
+    const compute = () => {
+      raf = 0;
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - window.innerHeight;
+      const p = scrollable > 0 ? window.scrollY / scrollable : 0;
+      setPct(Math.round(Math.min(1, Math.max(0, p)) * 100));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(compute);
+    };
+    compute();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const showHint = pct <= 0;
+  // 两态各自的字符序列 (key 用内容区分, 触发 AnimatePresence 进出)
+  const content = showHint ? PROGRESS_HINT : `${pct}%`;
+  const chars = content.split("");
+
+  return (
+    <span
+      aria-hidden="true"
+      className="pointer-events-none absolute left-1/2 flex h-5 -translate-x-1/2 items-center justify-center overflow-hidden whitespace-nowrap font-[family-name:var(--font-poppins)] font-medium tabular-nums"
+      style={{
+        top: topOffset,
+        fontSize,
+        lineHeight: "20px",
+        color: textColor,
+        letterSpacing: "normal",
+        transition: "color 0.35s ease",
+      }}
+    >
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={showHint ? "hint" : "pct"}
+          className="inline-flex"
+          // 整体淡入淡出兜底; 内部字符做错位翻滚
+          initial="enter"
+          animate="show"
+          exit="leave"
+        >
+          {chars.map((ch, i) => (
+            <motion.span
+              key={i}
+              className="inline-block"
+              style={{ whiteSpace: "pre" }}
+              variants={{
+                enter: { y: "0.7em", opacity: 0 },
+                show: {
+                  y: "0em",
+                  opacity: 1,
+                  transition: {
+                    delay: i * 0.018,
+                    duration: 0.42,
+                    ease: PROGRESS_EASE,
+                  },
+                },
+                leave: {
+                  y: "-0.7em",
+                  opacity: 0,
+                  transition: {
+                    delay: i * 0.012,
+                    duration: 0.3,
+                    ease: PROGRESS_EASE,
+                  },
+                },
+              }}
+            >
+              {ch}
+            </motion.span>
+          ))}
+        </motion.span>
+      </AnimatePresence>
+    </span>
   );
 }
 

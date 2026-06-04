@@ -21,15 +21,12 @@
 
 import { useEffect, useRef, useCallback, useMemo } from "react";
 import { useT } from "@/lib/i18n";
+import {
+  FIRST_SCREEN_IMAGES as DEFAULT_IMAGES,
+  FIRST_SCREEN_VIDEOS as DEFAULT_VIDEOS,
+} from "@/lib/firstScreenAssets";
 
 /* ===================== Intro 部分常量 ===================== */
-
-// 本地背景视频, 放在 public/timeline/ 下。reveal 后按数组顺序自动循环, 数量任意。
-const DEFAULT_VIDEOS = [
-  "/timeline/1.mp4",
-  "/timeline/2.mp4",
-  "/timeline/3.mp4",
-];
 
 // Joby 源码: t.add(() => { S[0].opacity="1"; T[0].play() }, 0.89)
 // reveal 后视频层淡入; 之后 3 个视频顺序自动循环 (无滚动断点), 由 'ended' 事件驱动切换。
@@ -37,29 +34,7 @@ const VIDEO_REVEAL_AT = 0.89;
 // 年份索引推进区间。原站从 15% 才开始切年，这里提前到 sticky 到位即开始。
 const BREAKTHROUGHS_INDEX_START = 0;
 const BREAKTHROUGHS_INDEX_END = 0.65;
-const IMAGE_SEQUENCE_VERSION = "20260529-3x-source";
-
-const DEFAULT_IMAGES = [
-  `/img/1.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/2.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/3.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/4.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/5.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/6.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/7.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/8.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/9.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/10.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/11.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/12.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/13.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/14.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/15.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/16.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/17.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/18.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-  `/img/19.webp?v=${IMAGE_SEQUENCE_VERSION}`,
-];
+const EAGER_FRAME_COUNT = 6;
 
 function power2Out(t: number) { return 1 - (1 - t) * (1 - t); }
 function power2InOut(t: number) { return t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) * (-2 * t + 2) / 2; }
@@ -317,15 +292,41 @@ export function JobyTimeline({
     return () => window.removeEventListener("resize", calc);
   }, []);
 
-  /* ----- 预加载图片 ----- */
+  /* Preloader 不再阻塞加载序列帧; 首段关键帧提前加载, 其余帧 reveal 后后台预热。 */
   useEffect(() => {
-    images.forEach((src, i) => {
-      if (i >= 2) {
-        const img = new Image();
-        img.src = src;
+    if (!introReady) {
+      return;
+    }
+
+    let cancelled = false;
+    const warmed: HTMLImageElement[] = [];
+    const timers: number[] = [];
+
+    const warmImage = (src: string) => {
+      if (cancelled) {
+        return;
       }
+      const img = new Image();
+      img.decoding = "async";
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = src;
+      };
+      img.src = src.replace(".webp", ".avif");
+      warmed.push(img);
+    };
+
+    images.slice(EAGER_FRAME_COUNT).forEach((src, index) => {
+      const id = window.setTimeout(() => warmImage(src), 80 + index * 35);
+      timers.push(id);
     });
-  }, [images]);
+
+    return () => {
+      cancelled = true;
+      timers.forEach((id) => window.clearTimeout(id));
+      warmed.length = 0;
+    };
+  }, [images, introReady]);
 
   /* ----- timelineHeader 1-4 线条：scroll-scrub 平滑驱动 --progress ----- */
   /* Joby 原版用 GSAP scrollTrigger 的 scrub:true 把每个 header 在视口内的
@@ -405,6 +406,9 @@ export function JobyTimeline({
       if (!vid) return;
       if (isActive) {
         try { vid.currentTime = 0; } catch { /* noop */ }
+        if (vid.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+          vid.load();
+        }
         vid.play().catch(() => {});
       } else {
         vid.pause();
@@ -662,6 +666,25 @@ export function JobyTimeline({
     };
   }, [showCycleVideo]);
 
+  /* 首屏图片出来后, 分批预热时间轴视频, 避免滚到视频 reveal 点才开始下载。 */
+  useEffect(() => {
+    if (!introReady) {
+      return;
+    }
+
+    const timers = videoElRefs.current.map((vid, index) =>
+      window.setTimeout(() => {
+        if (!vid) {
+          return;
+        }
+        vid.preload = index === 0 ? "auto" : "metadata";
+        vid.load();
+      }, 900 + index * 600),
+    );
+
+    return () => timers.forEach((id) => window.clearTimeout(id));
+  }, [introReady]);
+
   /* ----- helpers ----- */
   function renderScrollTitle(text: string) {
     return text.split("").map((ch, i) => (
@@ -684,12 +707,21 @@ export function JobyTimeline({
                 data-visible={i === 0 ? "true" : "false"}
                 style={i === 0 ? { display: "block", opacity: 1 } : { display: "none", opacity: 0 }}
               >
-                <img
-                  src={src}
-                  alt=""
-                  loading={i < 2 ? "eager" : "lazy"}
-                  decoding="async"
-                />
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcSet={src.replace(".webp", ".avif")}
+                  />
+                  <img
+                    src={src}
+                    alt=""
+                    loading={i < EAGER_FRAME_COUNT ? "eager" : "lazy"}
+                    fetchPriority={
+                      i === 0 ? "high" : i < EAGER_FRAME_COUNT ? "auto" : "low"
+                    }
+                    decoding="async"
+                  />
+                </picture>
               </div>
             ))}
           </div>
@@ -708,7 +740,7 @@ export function JobyTimeline({
                 src={src}
                 muted
                 playsInline
-                preload="metadata"
+                preload={introReady && i === 0 ? "auto" : "metadata"}
               />
             </div>
           ))}

@@ -3146,11 +3146,12 @@ function PhoneHandReveal({ entered, progress = 0, videoSrc = "credit" }: { enter
         loop
         muted
         playsInline
+        preload="auto"
         className="absolute inset-0 block w-full h-full select-none"
         style={{ objectFit: "contain" }}
       >
-        <source src={`/figma/credmex/${videoSrc}-phone.mov`} type='video/mp4; codecs="hvc1"' />
         <source src={`/figma/credmex/${videoSrc}-phone.webm`} type="video/webm" />
+        <source src={`/figma/credmex/${videoSrc}-phone.mov`} type='video/mp4; codecs="hvc1"' />
       </video>
     </div>
   );
@@ -4745,7 +4746,10 @@ function CollaborationsSection({ scale }: { scale?: number }) {
           style={{ position: "absolute", inset: 0, ["--total-items" as string]: total }}
         >
 
-          {/* 右侧：当前 active icon */}
+          {/* 右侧：当前 active icon
+              全部图标常驻 DOM、用 opacity 切换显隐 —— 避免随 activeIdx 切 src 时
+              销毁/重建 <img> 导致"切到才临时加载、空白一下"。图标都是小 SVG (共 ~92KB),
+              首次渲染即全部加载进缓存, 滚动切换零延迟。 */}
           <div
             style={{
               position: "absolute",
@@ -4753,22 +4757,27 @@ function CollaborationsSection({ scale }: { scale?: number }) {
               left: "75%",
               transform: "translate(-50%, -50%)",
               zIndex: 2,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 16 * s,
+              width: 40 * s,
+              height: 40 * s,
             }}
           >
-            <img
-              key={COLLAB_BRANDS[activeIdx].name}
-              src={COLLAB_BRANDS[activeIdx].icon}
-              alt={COLLAB_BRANDS[activeIdx].name}
-              style={{
-                width: 40 * s,
-                height: 40 * s,
-                transition: "opacity 0.4s, transform 0.4s",
-              }}
-            />
+            {COLLAB_BRANDS.map((brand, i) => (
+              <img
+                key={brand.name}
+                src={brand.icon}
+                alt={brand.name}
+                loading="eager"
+                decoding="async"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: 40 * s,
+                  height: 40 * s,
+                  opacity: i === activeIdx ? 1 : 0,
+                  transition: "opacity 0.4s",
+                }}
+              />
+            ))}
           </div>
 
           {/* 弧形品牌名 */}

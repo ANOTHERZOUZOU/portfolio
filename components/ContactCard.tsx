@@ -14,7 +14,7 @@ import { useT } from "@/lib/i18n";
 
 const WECHAT = "anotherzouzou";
 const AVATAR = "/figma/footer/avatar.png";
-const QR = "/figma/footer/wechat-qr.png";
+const QR = "/wechat/Frame 2147226088.svg";
 
 // 石头相对「卡片左上角」(卡片 302×94) 的摆位, 取自 Figma 节点 1934:23993~23997
 // 漂浮参数沿用旧 Hero (HomeExperience.hero-legacy) 的 RockSpec 模型: X/Y/旋转

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fugaz_One, Geist_Mono, Lexend, Poppins } from "next/font/google";
+import { Bebas_Neue, Fugaz_One, Geist_Mono, Lexend, Poppins } from "next/font/google";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
@@ -65,6 +65,13 @@ const fugazOne = Fugaz_One({
   weight: "400",
 });
 
+// 窄长 condensed 字体: 用于 Preloader 巨型 LOADING + 数字 (瘦高、全大写海报风)。
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -72,7 +79,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body className={`${poppins.variable} ${geistMono.variable} ${lexend.variable} ${fugazOne.variable}`}>
+      <body className={`${poppins.variable} ${geistMono.variable} ${lexend.variable} ${fugazOne.variable} ${bebasNeue.variable}`}>
         <LanguageProvider>
           <SmoothScrollProvider />
           {children}

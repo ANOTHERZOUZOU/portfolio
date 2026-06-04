@@ -1029,21 +1029,10 @@ body {
 /* =============================================================
    Joby Technology / Safety slider copy
    Source structure: section#safety-in > SectionSafetySlider
+   字体走站内规范 var(--font-sans) (英文 Poppins + 中文苹方),
+   不再外链 jobyaviation.com 的字体 (此前的 @font-face 未被任何
+   元素使用, 已移除, 避免海外字体请求拖慢加载)。
    ============================================================= */
-@font-face {
-  font-family: "JobySafetyDisplay";
-  src: url("https://www.jobyaviation.com/_next/static/media/JobySans_Display_Variable-s.p.cdf48502.woff2") format("woff2");
-  font-weight: 400 700;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "JobySafetyText";
-  src: url("https://www.jobyaviation.com/_next/static/media/JobySans_Text_Variable-s.p.5174080c.woff2") format("woff2");
-  font-weight: 400 700;
-  font-display: swap;
-}
-
 .jobySafetySectionWrapper {
   width: 100%;
   position: relative;
