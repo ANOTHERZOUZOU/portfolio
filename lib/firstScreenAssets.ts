@@ -5,7 +5,7 @@
 // 两边引用同一份, 保证预加载 URL 与实际渲染请求完全一致, 才能命中浏览器缓存。
 
 // 序列帧版本号: 修改源图后改这里, 强制刷新缓存。
-export const IMAGE_SEQUENCE_VERSION = "20260603-egg";
+export const IMAGE_SEQUENCE_VERSION = "20260604-f19";
 
 // Intro 滚动序列帧 (1..19), 滚动 scrub 必须全部就绪才流畅, 是预加载进度的主体。
 export const FIRST_SCREEN_IMAGES: string[] = Array.from(
