@@ -7,9 +7,9 @@
 // 序列帧版本号: 修改源图后改这里, 强制刷新缓存。
 export const IMAGE_SEQUENCE_VERSION = "20260603-egg";
 
-// Intro 滚动序列帧 (1..20), 滚动 scrub 必须全部就绪才流畅, 是预加载进度的主体。
+// Intro 滚动序列帧 (1..19), 滚动 scrub 必须全部就绪才流畅, 是预加载进度的主体。
 export const FIRST_SCREEN_IMAGES: string[] = Array.from(
-  { length: 20 },
+  { length: 19 },
   (_, i) => `/img/${i + 1}.webp?v=${IMAGE_SEQUENCE_VERSION}`,
 );
 
