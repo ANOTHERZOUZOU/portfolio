@@ -1,22 +1,30 @@
 @import "tailwindcss";
 
+/* ============================================================
+   全站字体栈 — 必须定义在 body 作用域 (不能在 :root)。
+   next/font 把 --font-poppins 注入到 <body> 的 className 上, :root(html)
+   看不到它。若在 :root 写 --font-sans: var(--font-poppins)..., 解析时
+   --font-poppins 为空 → 整个 --font-sans 变 guaranteed-invalid → 空,
+   再继承给 body 也是空 → 英文回退到 ui-sans-serif / 系统 .SF NS。
+   定义在 body 上才能取到 --font-poppins。末尾 'Poppins' 兜底, 以防
+   变量缺失。Poppins 不含中文字形 → 拉丁走 Poppins, 中文回退苹方。
+   ============================================================ */
+body {
+  --font-sans: var(--font-poppins, "Poppins"), "PingFang SC", "PingFang TC",
+    "Microsoft YaHei", "Hiragino Sans GB", system-ui, sans-serif;
+}
+
 :root {
   --background: #000000;
   --foreground: #f6f6f0;
   --brand-green: #c7fc07;
 
   /* ============================================================
-     全站默认字体栈 (唯一数据源).
-     font-family 是"按字形逐字回退": Poppins 不含中文字形, 所以
-     拉丁字母 / 数字走 Poppins, 中文自动落到后面的 PingFang.
-       → 英文 = Poppins, 中文 = PingFang (Windows 无 PingFang 时退到
-         微软雅黑, 老 macOS 退到冬青黑, 最后 system-ui/sans-serif).
-     所有正文 UI 都应引用 var(--font-sans), 不要再写散落的
-     "var(--font-poppins), Arial..." 之类. (Credmex 排版样张里刻意
-     展示的 Lexend/Fugaz One/Inter 等品牌字属于例外, 不走这里.)
+     全站默认字体栈定义在上面的 @theme 块里 (Tailwind v4 要求),
+     否则无法覆盖 Tailwind 默认的 --font-sans=ui-sans-serif。
+     所有正文 UI 都应引用 var(--font-sans)。Credmex 排版样张里刻意
+     展示的 Lexend/Fugaz One/Inter 等品牌字属于例外, 不走这里。
      ============================================================ */
-  --font-sans: var(--font-poppins), "PingFang SC", "PingFang TC",
-    "Microsoft YaHei", "Hiragino Sans GB", system-ui, sans-serif;
 
   /* ============================================================
      标准响应式断点 (与 Tailwind v4 默认值 + 业界主流约定一致):

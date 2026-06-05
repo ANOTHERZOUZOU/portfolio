@@ -165,7 +165,7 @@ export default function AiProjectSection({ id = "ai" }: { id?: string }) {
               }
             : {
                 marginTop: "clamp(64px, 12vh, 140px)",
-                width: "min(86vw, calc((100vh - 300px) * 16 / 9), 940px)",
+                width: "min(86vw, calc((100vh - 220px) * 16 / 9), 1200px)",
                 borderRadius: 18,
                 border: "1px solid rgba(255,255,255,0.12)",
                 background: "rgba(255,255,255,0.03)",

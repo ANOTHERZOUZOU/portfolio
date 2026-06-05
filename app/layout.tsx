@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bebas_Neue, Fugaz_One, Geist_Mono, Lexend, Poppins } from "next/font/google";
+import { Bebas_Neue, Fugaz_One, Geist_Mono, Inter, Lexend, Poppins, Tilt_Warp } from "next/font/google";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
@@ -72,6 +72,20 @@ const bebasNeue = Bebas_Neue({
   weight: "400",
 });
 
+// Credmex 字体排版样张专用 (设计稿刻意展示这些品牌字, 非全站正文字体)。
+// Inter: 字号/层级说明的小字; Tilt Warp: "Aa" 大字展示 (单字重 400)。
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const tiltWarp = Tilt_Warp({
+  variable: "--font-tilt-warp",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -79,7 +93,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body className={`${poppins.variable} ${geistMono.variable} ${lexend.variable} ${fugazOne.variable} ${bebasNeue.variable}`}>
+      <body className={`${poppins.variable} ${geistMono.variable} ${lexend.variable} ${fugazOne.variable} ${bebasNeue.variable} ${inter.variable} ${tiltWarp.variable}`}>
         <LanguageProvider>
           <SmoothScrollProvider />
           {children}

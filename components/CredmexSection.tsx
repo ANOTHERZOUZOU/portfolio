@@ -3,6 +3,7 @@
 import {
   createContext,
   forwardRef,
+  Fragment,
   useContext,
   useEffect,
   useRef,
@@ -369,6 +370,12 @@ export const CredmexSection = forwardRef<HTMLElement, { id?: string }>(
         {/* 字体层级展示 */}
         <TypeHierarchySection scale={scale} />
 
+        {/* 为什么需要 Brand Center (品牌宣传上方) — 暂不上线 */}
+        {/* <BrandCenterSection /> */}
+
+        {/* Brand Center 包含哪些品牌资产 — 暂不上线 */}
+        {/* <BrandAssetsSection /> */}
+
         {/* 品牌宣传 */}
         <div
           id="brand"
@@ -695,7 +702,7 @@ function TypeHierarchySection({ scale }: { scale?: number }) {
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 style={{
-                  fontFamily: "'Poppins', sans-serif",
+                  fontFamily: "var(--font-sans)",
                   fontWeight: 600,
                   fontSize: 40,
                   lineHeight: "normal",
@@ -725,7 +732,7 @@ function TypeHierarchySection({ scale }: { scale?: number }) {
               <div style={{ position: "absolute", right: -5, top: "50%", transform: "translateY(-50%)", width: 7, height: 7, backgroundColor: "#DFDFE9", border: "2px solid #C0C1D0" }} />
               <span
                 style={{
-                  fontFamily: "'Tilt Warp', sans-serif",
+                  fontFamily: "var(--font-tilt-warp), sans-serif",
                   fontSize: 60,
                   fontWeight: 900,
                   color: "#5F5B7A",
@@ -802,7 +809,7 @@ function TypeHierarchySection({ scale }: { scale?: number }) {
                   Bold 700
                 </p>
                 <HorizontalPathArrow width={147} viewBoxWidth={147} />
-                <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400, fontSize: 12, lineHeight: 1.63, color: "#5F5B7A", margin: 0, whiteSpace: "nowrap" }}>
+                <p style={{ fontFamily: "var(--font-inter), sans-serif", fontWeight: 400, fontSize: 12, lineHeight: 1.63, color: "#5F5B7A", margin: 0, whiteSpace: "nowrap" }}>
                   Headline, Key Content, Label
                 </p>
               </div>
@@ -811,7 +818,7 @@ function TypeHierarchySection({ scale }: { scale?: number }) {
                   Regular 400
                 </p>
                 <HorizontalPathArrow width={91} viewBoxWidth={91.5} delay={0.08} />
-                <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400, fontSize: 12, lineHeight: 1.63, color: "#5F5B7A", margin: 0, whiteSpace: "nowrap" }}>
+                <p style={{ fontFamily: "var(--font-inter), sans-serif", fontWeight: 400, fontSize: 12, lineHeight: 1.63, color: "#5F5B7A", margin: 0, whiteSpace: "nowrap" }}>
                   Sub-Title, Body, Caption
                 </p>
               </div>
@@ -827,7 +834,7 @@ function TypeHierarchySection({ scale }: { scale?: number }) {
                   Fugaz One
                 </p>
                 <HorizontalPathArrow width={129} viewBoxWidth={129} delay={0.16} />
-                <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400, fontSize: 12, lineHeight: 1.63, color: "#5F5B7A", margin: 0, whiteSpace: "nowrap" }}>
+                <p style={{ fontFamily: "var(--font-inter), sans-serif", fontWeight: 400, fontSize: 12, lineHeight: 1.63, color: "#5F5B7A", margin: 0, whiteSpace: "nowrap" }}>
                   Headline, Derivative
                 </p>
               </div>
@@ -1261,6 +1268,489 @@ function OverviewSection({ scale }: { scale?: number }) {
         </div>
       </div>
     </div>
+  );
+}
+
+/* ============================================================
+ * 子段: 为什么需要 Brand Center (Figma node 2084:19407)
+ * 严格按 Figma 自动布局复刻: 垂直 column gap 56, pt160 pb80 px40, 深底 #1B1D1B。
+ *   1) 标题区 (column gap 120): 主标题 + 副标题
+ *   2) 内容区 (column gap 48):
+ *      - 三栏对比头 (row, px140 gap79): 当前问题 / 设计目标 / 设计策略 + 渐变分隔线
+ *      - 主体三列 (row 居中 gap50): 灰卡列 → 箭头 → 虚线胶囊列 → 箭头 → 绿卡列
+ *      - 底部说明文字
+ *   右上角 credmex logo 网格氛围装饰 (CSS 复刻)。
+ * ============================================================ */
+const BRAND_CENTER_PROBLEMS = [
+  {
+    title: { zh: "假冒干扰", en: "Counterfeit Noise" },
+    body: {
+      zh: "海外金融产品市场中，假冒 App 和相似产品容易干扰用户判断，用户难以快速确认官方品牌",
+      en: "In overseas fintech markets, fake apps and look-alikes blur user judgment, making it hard to quickly confirm the official brand.",
+    },
+  },
+  {
+    title: { zh: "品牌识别", en: "Brand Recognition" },
+    body: {
+      zh: "Logo、App Icon、品牌色和活动视觉分散在不同触点中，缺少统一的官方品牌记忆",
+      en: "Logo, app icon, brand colors and campaign visuals are scattered across touchpoints, lacking a unified official brand memory.",
+    },
+  },
+  {
+    title: { zh: "信任成本", en: "Trust Cost" },
+    body: {
+      zh: "金融产品天然存在信任门槛，用户需要通过稳定、清晰的品牌表达建立安全感",
+      en: "Financial products carry an inherent trust barrier; users need stable, clear brand expression to build a sense of security.",
+    },
+  },
+];
+
+const BRAND_CENTER_GOALS = [
+  { zh: "强化官方识别", en: "Official Recognition" },
+  { zh: "建立品牌记忆", en: "Brand Memory" },
+  { zh: "降低信任疑虑", en: "Trust Building" },
+];
+
+const BRAND_CENTER_STRATEGIES = [
+  {
+    title: { zh: "系统化品牌资产", en: "Systematic Brand Assets" },
+    body: {
+      zh: "将 Logo、App Icon、品牌色和辅助图形拆分为核心识别、产品入口和传播延展三类资产，建立清晰的品牌资产结构",
+      en: "Split logo, app icon, brand colors and supporting graphics into core identity, product entry and communication assets for a clear structure.",
+    },
+  },
+  {
+    title: { zh: "多触点一致表达", en: "Consistent Expression" },
+    body: {
+      zh: "通过不同背景、尺寸和触点的展示，说明品牌资产在实际场景中的使用方式，保证官网、App 和营销传播中的表达一致",
+      en: "Show assets across backgrounds, sizes and touchpoints to keep expression consistent across the site, app and marketing.",
+    },
+  },
+  {
+    title: { zh: "可复用传播元素", en: "Reusable Elements" },
+    body: {
+      zh: "从 Logo 字形和品牌色中提取可复用图形元素，支持 Banner、弹窗、活动页和社媒素材中的持续应用",
+      en: "Extract reusable graphic elements from the logotype and brand colors for banners, popups, campaign pages and social assets.",
+    },
+  },
+];
+
+function BrandCenterArrow() {
+  // 设计稿原始 Union 箭头资源 (实心右向箭头, 白→透明横向渐变)。
+  return (
+    <img
+      src="/brand-center/arrow.svg"
+      alt=""
+      aria-hidden="true"
+      className="shrink-0"
+      width={68}
+      height={42}
+    />
+  );
+}
+
+function BrandCenterLogoDeco() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute right-[24px] top-[34px] hidden w-[min(60vw,784px)] max-w-none select-none lg:block"
+      style={{ aspectRatio: "784 / 478" }}
+    >
+      <img
+        src="/brand-center/logo-deco.png"
+        srcSet="/brand-center/logo-deco.png 1x, /brand-center/logo-deco@2x.png 2x, /brand-center/logo-deco@3x.png 3x"
+        alt=""
+        className="absolute inset-0 h-full w-full"
+        draggable={false}
+        decoding="async"
+      />
+    </div>
+  );
+}
+
+function BrandCenterSection() {
+  const t = useT();
+  const SANS = "var(--font-sans)";
+
+  return (
+    <section
+      id="brand-center"
+      data-dark-section
+      className="relative w-full overflow-hidden"
+      style={{ backgroundColor: "#1B1D1B" }}
+    >
+      <BrandCenterLogoDeco />
+
+      {/* 椭圆模糊光晕: Figma 2084:19408 椭圆本体 1051x279, 但 SVG viewBox(1806.6x1034.6)
+          含大范围高斯模糊扩散区。容器须按 viewBox 完整比例给尺寸, 否则 preserveAspectRatio=none
+          会把图压扁。椭圆本体中心定位在容器约 65.8% 高度处 (752+279/2)/1328。 */}
+      <img
+        src="/brand-center/ellipse-glow.svg"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-[65.8%] h-[1034.6px] w-[1806.6px] max-w-none -translate-x-1/2 -translate-y-1/2"
+      />
+
+      {/* 自动布局: column gap 56, pt160 pb80 px40 */}
+      <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col items-start gap-[56px] px-[24px] pb-[80px] pt-[100px] md:px-[40px] md:pt-[160px]">
+        {/* 标题区: Figma 120 gap (h2 底 192 → 副标题顶 312)。响应式收窄。 */}
+        <div className="flex w-full max-w-[604px] flex-col items-start gap-[56px] md:gap-[120px]">
+          <h2
+            className="m-0 leading-tight text-white"
+            style={{ fontFamily: SANS, fontSize: "clamp(32px,5vw,64px)", fontWeight: 600 }}
+          >
+            {t("面向营销传播的品牌基础系统展示", "A brand foundation system built for marketing")}
+          </h2>
+          <p
+            className="m-0 leading-tight text-white"
+            style={{ fontFamily: SANS, fontSize: "clamp(24px,3.2vw,40px)", fontWeight: 600 }}
+          >
+            {t("为什么需要 Brand Center", "Why we need a Brand Center")}
+          </p>
+        </div>
+
+        {/* 内容区: column gap 48 */}
+        <div className="flex w-full flex-col items-start gap-[48px]">
+          {/* 三栏对比头 + 主体三列: 容器 column gap 40, 末尾说明文字 */}
+          <div className="flex w-full flex-col items-end gap-[40px]">
+            {/* 三栏对比头: row, gap 79, px140 (响应式) */}
+            <div className="hidden w-full items-center gap-[clamp(24px,4vw,79px)] px-[clamp(16px,8vw,140px)] lg:flex">
+              {[
+                t("当前问题", "Current Problems"),
+                t("设计目标", "Design Goals"),
+                t("设计策略", "Design Strategy"),
+              ].map((label, i, arr) => (
+                <Fragment key={label}>
+                  <span
+                    className="shrink-0 whitespace-nowrap text-[#ECECEC]"
+                    style={{ fontFamily: SANS, fontSize: "clamp(20px,2.2vw,32px)", fontWeight: 700 }}
+                  >
+                    {label}
+                  </span>
+                  {i < arr.length - 1 && (
+                    <img
+                      src="/brand-center/divider-line.svg"
+                      alt=""
+                      aria-hidden="true"
+                      className="h-px min-w-px flex-1"
+                    />
+                  )}
+                </Fragment>
+              ))}
+            </div>
+
+            {/* 主体三列: row 居中 gap 50 (窄屏堆叠) */}
+            <div className="flex w-full flex-col items-stretch justify-center gap-[28px] lg:flex-row lg:items-center lg:gap-[clamp(20px,3.5vw,50px)]">
+              {/* 左列: 灰卡 3 张 */}
+              <div className="flex w-full flex-col items-start gap-[12px] lg:w-[374px] lg:shrink-0">
+                <span className="text-[#ECECEC] lg:hidden" style={{ fontFamily: SANS, fontSize: 22, fontWeight: 700 }}>
+                  {t("当前问题", "Current Problems")}
+                </span>
+                {BRAND_CENTER_PROBLEMS.map((item) => (
+                  <div
+                    key={item.title.zh}
+                    className="flex w-full flex-col items-start gap-[8px] rounded-[20px] bg-[#3B3B3B] px-[24px] py-[20px]"
+                  >
+                    <p className="m-0 text-white" style={{ fontFamily: SANS, fontSize: 24, fontWeight: 600 }}>
+                      {t(item.title.zh, item.title.en)}
+                    </p>
+                    <p className="m-0 text-[#ECECEC]" style={{ fontFamily: SANS, fontSize: 12, fontWeight: 400, lineHeight: 1.6 }}>
+                      {t(item.body.zh, item.body.en)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="hidden lg:block">
+                <BrandCenterArrow />
+              </div>
+
+              {/* 中列: 虚线胶囊 3 个 */}
+              <div className="flex w-full flex-col items-stretch gap-[19px] lg:w-[279px] lg:shrink-0">
+                <span className="text-[#ECECEC] lg:hidden" style={{ fontFamily: SANS, fontSize: 22, fontWeight: 700 }}>
+                  {t("设计目标", "Design Goals")}
+                </span>
+                {BRAND_CENTER_GOALS.map((item) => (
+                  <div
+                    key={item.zh}
+                    className="relative flex flex-col items-center rounded-[67px] bg-[rgba(89,89,89,0.76)] px-[24px] py-[28px] text-center md:py-[40px]"
+                  >
+                    {/* SVG 虚线描边: CSS border-dashed 在大圆角拐角处节奏会错位, 改用 SVG 精确控制 dash */}
+                    <svg
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 h-full w-full"
+                      preserveAspectRatio="none"
+                    >
+                      <rect
+                        x="1"
+                        y="1"
+                        width="calc(100% - 2px)"
+                        height="calc(100% - 2px)"
+                        rx="66"
+                        ry="66"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeDasharray="10 8"
+                        strokeLinecap="round"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                    </svg>
+                    <p className="relative m-0 text-white" style={{ fontFamily: SANS, fontSize: 24, fontWeight: 700 }}>
+                      {t(item.zh, item.zh)}
+                    </p>
+                    <p className="relative m-0 text-white" style={{ fontFamily: SANS, fontSize: 24, fontWeight: 600 }}>
+                      {item.en}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="hidden lg:block">
+                <BrandCenterArrow />
+              </div>
+
+              {/* 右列: 绿卡 3 张 */}
+              <div className="flex w-full flex-col items-start gap-[12px] lg:w-[374px] lg:shrink-0">
+                <span className="text-[#ECECEC] lg:hidden" style={{ fontFamily: SANS, fontSize: 22, fontWeight: 700 }}>
+                  {t("设计策略", "Design Strategy")}
+                </span>
+                {BRAND_CENTER_STRATEGIES.map((item) => (
+                  <div
+                    key={item.title.zh}
+                    className="flex w-full flex-col items-start gap-[8px] rounded-[20px] bg-[#ECFD96] px-[24px] py-[20px]"
+                  >
+                    <p className="m-0 text-black" style={{ fontFamily: SANS, fontSize: 24, fontWeight: 600 }}>
+                      {t(item.title.zh, item.title.en)}
+                    </p>
+                    <p className="m-0 text-[#3B3B3B]" style={{ fontFamily: SANS, fontSize: 12, fontWeight: 400, lineHeight: 1.6 }}>
+                      {t(item.body.zh, item.body.en)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 底部说明文字 */}
+          <p
+            className="m-0 text-[#767676]"
+            style={{ fontFamily: SANS, fontSize: 14, fontWeight: 400, lineHeight: 1.5 }}
+          >
+            {t(
+              "Brand Center 不是把资产摆出来，而是用一套规则把品牌资产组织起来、展示出来，并延展到后续产品和营销场景中",
+              "Brand Center isn't about displaying assets — it organizes and presents brand assets through a set of rules, extending them into future product and marketing scenarios.",
+            )}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+ * 子段: Brand Center 里面包含哪些品牌资产
+ * Figma node 2083:19387 (1440x4389)
+ * 标题 + 4 类资产子区块(Logo/Desk Icon/Color/Graphic) + 滑动叙事区
+ * 间距: 标题区→01 = 120, 子区块间 = 120, 序号行→展示区 = 40
+ * ============================================================ */
+const BRAND_ASSET_COLORS = [
+  { name: "Energy Green", hex: "#ECFD96", rgb: "R 236 G 253 B 150", text: "#111111", bg: "#ECFD96" },
+  { name: "Rich Purple", hex: "#160F2D", rgb: "R 22 G 15 B 45", text: "#FFFFFF", bg: "#160F2D" },
+  { name: "Classic Black", hex: "#FF2E7E", rgb: "R 255 G 46 B 126", text: "#FFFFFF", bg: "#FF2E7E" },
+  { name: "Vogue Pink", hex: "#6C5CE7", rgb: "R 108 G 92 B 231", text: "#FFFFFF", bg: "#6C5CE7" },
+];
+
+const BRAND_ASSET_NARRATIVE = [
+  {
+    no: "01",
+    title: { zh: "组织内容节奏", en: "Organize Content Rhythm" },
+    body: {
+      zh: "通过 Framer 将 Logo、App Icon、品牌色和辅助图形按浏览顺序串联起来，让品牌资产从单点展示变成连续叙事",
+      en: "Use Framer to string logo, app icon, brand colors and graphics into a browsing order, turning isolated assets into a continuous narrative.",
+    },
+  },
+  {
+    no: "02",
+    title: { zh: "强化动态呈现", en: "Strengthen Motion" },
+    body: {
+      zh: "滑动预览让模块之间自然衔接，品牌元素在切换中逐步出现，增强 Brand Center 的浏览完成度和品牌记忆点",
+      en: "Swipe previews connect modules naturally, revealing brand elements step by step to improve completion and memorability.",
+    },
+  },
+  {
+    no: "03",
+    title: { zh: "降低实现成本", en: "Lower Build Cost" },
+    body: {
+      zh: "相比完全依赖开发实现，Framer 可以更快完成页面节奏、动效衔接和交互预览验证，在较低成本下实现接近官网真实效果的动态展示",
+      en: "Compared with full dev work, Framer delivers page rhythm, motion and interaction previews faster, achieving near-production dynamic results at lower cost.",
+    },
+  },
+];
+
+function BrandAssetHeading({ no, en, zh, desc }: { no: string; en: string; zh: string; desc: { zh: string; en: string } }) {
+  const t = useT();
+  const SANS = "var(--font-sans)";
+  return (
+    <div className="flex w-full flex-col gap-[8px]">
+      <div className="flex items-baseline gap-[8px]">
+        <span className="text-white" style={{ fontFamily: SANS, fontSize: "clamp(20px,2.4vw,30px)", fontWeight: 700 }}>
+          {no}
+        </span>
+        <span className="text-white" style={{ fontFamily: SANS, fontSize: "clamp(20px,2.4vw,30px)", fontWeight: 600 }}>
+          {t(`${en} ${zh}`, `${en} ${zh}`)}
+        </span>
+      </div>
+      <p className="m-0 text-[#9A9A9A]" style={{ fontFamily: SANS, fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 400, lineHeight: 1.5 }}>
+        {t(desc.zh, desc.en)}
+      </p>
+    </div>
+  );
+}
+
+function BrandAssetsSection() {
+  const t = useT();
+  const SANS = "var(--font-sans)";
+
+  return (
+    <section
+      id="brand-assets"
+      data-dark-section
+      className="relative w-full overflow-hidden"
+      style={{ backgroundColor: "#1B1D1B" }}
+    >
+      <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col items-start gap-[120px] px-[24px] pb-[80px] pt-[80px] md:px-[40px]">
+        {/* 大标题区 */}
+        <div className="flex w-full flex-col gap-[12px]">
+          <h2 className="m-0 leading-tight text-white" style={{ fontFamily: SANS, fontSize: "clamp(28px,4vw,48px)", fontWeight: 600 }}>
+            {t("Brand Center 里面包含哪些品牌资产", "What's inside the Brand Center")}
+          </h2>
+          <p className="m-0 text-[#9A9A9A]" style={{ fontFamily: SANS, fontSize: "clamp(14px,1.6vw,20px)", fontWeight: 400 }}>
+            {t("4 类核心品牌资产 + 1 类应用场景资产", "4 core brand asset types + 1 application scenario type")}
+          </p>
+        </div>
+
+        {/* 01 Logo System */}
+        <div className="flex w-full flex-col gap-[40px]">
+          <BrandAssetHeading
+            no="01"
+            en="Logo System"
+            zh="核心品牌识别"
+            desc={{
+              zh: "建立 Credmex 最核心的官方品牌识别，让用户能快速认出正版品牌",
+              en: "Establish Credmex's most core official brand identity so users can quickly recognize the authentic brand.",
+            }}
+          />
+          <div className="flex w-full flex-col gap-[20px] lg:flex-row">
+            {/* 左: 深色大卡 (credmex 字标) — 图片占位 */}
+            <div
+              className="flex aspect-[1005/577] w-full items-center justify-center overflow-hidden rounded-[20px] lg:flex-1"
+              style={{ backgroundColor: "#2B2B2B" }}
+            >
+              <span className="text-[#5A5A5A]" style={{ fontFamily: SANS, fontSize: 14 }}>credmex logo 占位</span>
+            </div>
+            {/* 右: 3 个彩色 logo 卡 — 图片占位 */}
+            <div className="flex w-full flex-row gap-[20px] lg:w-[299px] lg:shrink-0 lg:flex-col">
+              {["#ECFD96", "#6C5CE7", "#FF2E7E"].map((c) => (
+                <div
+                  key={c}
+                  className="flex aspect-[299/167] flex-1 items-center justify-center rounded-[16px] lg:flex-none"
+                  style={{ backgroundColor: c }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 02 Desk Icon */}
+        <div className="flex w-full flex-col gap-[40px]">
+          <BrandAssetHeading
+            no="02"
+            en="Desk Icon"
+            zh="移动端产品入口资产"
+            desc={{
+              zh: "帮助用户在应用商店和手机桌面中快速识别官方 Credmex App",
+              en: "Help users quickly identify the official Credmex App in app stores and on the home screen.",
+            }}
+          />
+          <div className="flex aspect-[1360/700] w-full overflow-hidden rounded-[20px]">
+            {/* 左: 浅色卡 App 图标 — 占位 */}
+            <div className="flex flex-1 items-center justify-center" style={{ backgroundColor: "#F4F4F4" }}>
+              <span className="text-[#BBBBBB]" style={{ fontFamily: SANS, fontSize: 14 }}>App Icon 占位</span>
+            </div>
+            {/* 右: 绿色卡 + 手机桌面 — 占位 */}
+            <div className="flex flex-1 items-center justify-center" style={{ backgroundColor: "#ECFD96" }}>
+              <span className="text-[#7E8A4A]" style={{ fontFamily: SANS, fontSize: 14 }}>手机桌面 占位</span>
+            </div>
+          </div>
+        </div>
+
+        {/* 03 Color System */}
+        <div className="flex w-full flex-col gap-[40px]">
+          <BrandAssetHeading
+            no="03"
+            en="Color System"
+            zh="品牌色彩资产"
+            desc={{
+              zh: "通过稳定的品牌色建立识别度，同时区分品牌承载、重点信息和行动引导",
+              en: "Build recognition with stable brand colors while distinguishing brand carriers, key info and calls to action.",
+            }}
+          />
+          <div className="flex aspect-[1360/504] w-full overflow-hidden rounded-[20px]">
+            {BRAND_ASSET_COLORS.map((c) => (
+              <div key={c.name} className="flex flex-1 flex-col justify-between p-[24px]" style={{ backgroundColor: c.bg }}>
+                <span style={{ fontFamily: SANS, fontSize: "clamp(14px,1.4vw,18px)", fontWeight: 700, color: c.text }}>
+                  {c.name}
+                </span>
+                <div className="flex flex-col gap-[4px]" style={{ color: c.text }}>
+                  <span style={{ fontFamily: SANS, fontSize: 13, fontWeight: 600 }}>{c.hex}</span>
+                  <span style={{ fontFamily: SANS, fontSize: 11, opacity: 0.8 }}>{c.rgb}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 04 Graphic Assets */}
+        <div className="flex w-full flex-col gap-[40px]">
+          <BrandAssetHeading
+            no="04"
+            en="Graphic Assets"
+            zh="辅助图形资产"
+            desc={{
+              zh: "让品牌不只停留在 Logo 层面，而是可以延展到官网、活动页、Banner、弹窗和社媒传播中",
+              en: "Extend the brand beyond the logo into the website, campaign pages, banners, popups and social media.",
+            }}
+          />
+          <div className="flex aspect-[1360/417] w-full items-center justify-center overflow-hidden rounded-[20px]" style={{ backgroundColor: "#FFFFFF" }}>
+            <span className="text-[#CFCFCF]" style={{ fontFamily: SANS, fontSize: 14 }}>mex. 辅助图形 占位</span>
+          </div>
+        </div>
+
+        {/* 滑动叙事区 */}
+        <div className="flex w-full flex-col gap-[40px]">
+          <h3 className="m-0 leading-tight text-white" style={{ fontFamily: SANS, fontSize: "clamp(24px,3vw,40px)", fontWeight: 600 }}>
+            {t("用滑动预览建立品牌资产叙事", "Build a brand asset narrative with swipe previews")}
+          </h3>
+          <div className="flex w-full flex-col items-center gap-[20px]">
+            {BRAND_ASSET_NARRATIVE.map((item) => (
+              <div
+                key={item.no}
+                className="flex w-full max-w-[840px] flex-col items-center gap-[8px] rounded-[60px] bg-[rgba(255,255,255,0.04)] px-[40px] py-[28px] text-center md:py-[40px]"
+              >
+                <div className="flex items-baseline gap-[8px]">
+                  <span className="text-white" style={{ fontFamily: SANS, fontSize: 24, fontWeight: 700 }}>{item.no}</span>
+                  <span className="text-white" style={{ fontFamily: SANS, fontSize: 24, fontWeight: 600 }}>{t(item.title.zh, item.title.en)}</span>
+                </div>
+                <p className="m-0 text-[#9A9A9A]" style={{ fontFamily: SANS, fontSize: "clamp(13px,1.4vw,16px)", fontWeight: 400, lineHeight: 1.6 }}>
+                  {t(item.body.zh, item.body.en)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
