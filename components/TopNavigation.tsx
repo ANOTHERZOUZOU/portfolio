@@ -85,6 +85,30 @@ export function TopNavigation({
   const dividerColor = "rgba(255,255,255,0.4)";
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // 滚动超过 1% 时, 在 "Design Portfolio" 右侧追加 "目录/Contents"
+  useEffect(() => {
+    let raf = 0;
+    const compute = () => {
+      raf = 0;
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - window.innerHeight;
+      const p = scrollable > 0 ? window.scrollY / scrollable : 0;
+      setScrolled(p > 0.01);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(compute);
+    };
+    compute();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   return (
     <>
@@ -131,6 +155,38 @@ export function TopNavigation({
           >
             Design Portfolio
           </motion.span>
+
+          <AnimatePresence initial={false}>
+            {scrolled && (
+              <motion.span
+                key="contents"
+                className="flex items-center whitespace-nowrap font-semibold"
+                style={{
+                  fontSize: logoFontSize,
+                  color: textColor,
+                  gap: 8,
+                  overflowX: "hidden", // 只裁水平(宽度展开), 垂直留给字符翻滚
+                }}
+                initial={{ width: 0 }}
+                animate={{ width: "auto" }}
+                exit={{ width: 0 }}
+                transition={{ duration: 0.42, ease: EASE_OUT }}
+              >
+                {/* 竖线: 先竖向画出, 退出时收回 */}
+                <motion.span
+                  aria-hidden="true"
+                  className="block shrink-0 origin-center"
+                  style={{ width: 1, height: 5, backgroundColor: dividerColor }}
+                  initial={{ scaleY: 0, opacity: 0 }}
+                  animate={{ scaleY: 1, opacity: 1 }}
+                  exit={{ scaleY: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: EASE_OUT }}
+                />
+                {/* 文字: 逐字符翻滚 + stagger 进出 */}
+                <ContentsLabel label={t("作品索引", "Index")} />
+              </motion.span>
+            )}
+          </AnimatePresence>
         </div>
       </button>
 
@@ -263,6 +319,43 @@ function ScrollProgress({
         </motion.span>
       </AnimatePresence>
     </motion.span>
+  );
+}
+
+/* 目录标签: 整块淡入后, 内部字符做错位翻滚 (进出都有), 与右下角进度同款语言。 */
+const CONTENTS_EASE = [0.22, 1, 0.36, 1] as const;
+
+function ContentsLabel({ label }: { label: string }) {
+  const chars = label.split("");
+  return (
+    <AnimatePresence mode="popLayout">
+      <motion.span key={label} className="inline-flex">
+        {chars.map((ch, i) => (
+          // 每个字符一个竖向"槽": overflow-hidden, 内部字符在槽内上下翻滚
+          <span
+            key={`${label}-${i}`}
+            className="inline-block overflow-hidden"
+            style={{ height: "1em", lineHeight: "1em", verticalAlign: "bottom" }}
+          >
+            <motion.span
+              className="inline-block"
+              style={{ whiteSpace: "pre" }}
+              initial={{ y: "1em" }}
+              animate={{
+                y: "0em",
+                transition: { delay: i * 0.035, duration: 0.42, ease: CONTENTS_EASE },
+              }}
+              exit={{
+                y: "-1em",
+                transition: { delay: i * 0.02, duration: 0.28, ease: CONTENTS_EASE },
+              }}
+            >
+              {ch}
+            </motion.span>
+          </span>
+        ))}
+      </motion.span>
+    </AnimatePresence>
   );
 }
 
