@@ -134,10 +134,15 @@ export function TopNavigation({
         </div>
       </button>
 
-      <ScrollProgress textColor={textColor} fontSize={logoFontSize - 2} topOffset={paddingTop} />
-
       <LanguageToggle textColor={textColor} dividerColor={dividerColor} />
     </motion.header>
+
+    <ScrollProgress
+      textColor={textColor}
+      fontSize={logoFontSize - 2}
+      paddingX={paddingX}
+      play={play}
+    />
 
     <NavOverlayMenu
       open={menuOpen}
@@ -149,11 +154,11 @@ export function TopNavigation({
 }
 
 /* ============================================================
- * 浏览进度百分比 —— 绝对居中于导航栏, 不挤占左右两端布局。
+ * 浏览进度百分比 —— 固定于视口右下角, 页边距遵循全站规范 (paddingX)。
  *   进度 = scrollTop / (文档可滚动高度), 监听 scroll 实时更新 (rAF 节流)。
  *   0% 时显示提示文案 "Slowly scroll down", 一旦开始滑动切换成百分比。
  *   两态切换: 逐字符错位翻滚 + 模糊渐显 (stagger), 有创意且不抖。
- *   颜色继承 header 的 mix-blend-difference, 跟随明暗背景自适应。
+ *   颜色用 mix-blend-difference, 跟随明暗背景自适应。
  * ============================================================ */
 const PROGRESS_HINT = "Slowly scroll down";
 const PROGRESS_EASE = [0.22, 1, 0.36, 1] as const;
@@ -161,11 +166,13 @@ const PROGRESS_EASE = [0.22, 1, 0.36, 1] as const;
 function ScrollProgress({
   textColor,
   fontSize,
-  topOffset,
+  paddingX,
+  play,
 }: {
   textColor: string;
   fontSize: number;
-  topOffset: number;
+  paddingX: number;
+  play: boolean;
 }) {
   const [pct, setPct] = useState(0);
 
@@ -192,22 +199,27 @@ function ScrollProgress({
   }, []);
 
   const showHint = pct <= 0;
+  const done = pct >= 100; // 到底时整体淡出消失
+  const visible = play && !done;
   // 两态各自的字符序列 (key 用内容区分, 触发 AnimatePresence 进出)
   const content = showHint ? PROGRESS_HINT : `${pct}%`;
   const chars = content.split("");
 
   return (
-    <span
+    <motion.span
       aria-hidden="true"
-      className="pointer-events-none absolute left-1/2 flex h-5 -translate-x-1/2 items-center justify-center overflow-hidden whitespace-nowrap font-[family-name:var(--font-poppins)] font-medium tabular-nums"
+      className="pointer-events-none fixed z-50 flex h-5 items-center justify-end overflow-hidden whitespace-nowrap font-[family-name:var(--font-poppins)] font-medium tabular-nums mix-blend-difference"
       style={{
-        top: topOffset,
+        bottom: `max(${paddingX}px, env(safe-area-inset-bottom))`,
+        right: `max(${paddingX}px, env(safe-area-inset-right))`,
         fontSize,
         lineHeight: "20px",
         color: textColor,
         letterSpacing: "normal",
-        transition: "color 0.35s ease",
       }}
+      initial={{ y: 16, opacity: 0 }}
+      animate={visible ? { y: 0, opacity: 1 } : { y: 16, opacity: 0 }}
+      transition={{ duration: done ? 0.35 : 0.7, delay: done ? 0 : 0.3, ease: EASE_OUT }}
     >
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
@@ -250,7 +262,7 @@ function ScrollProgress({
           ))}
         </motion.span>
       </AnimatePresence>
-    </span>
+    </motion.span>
   );
 }
 
