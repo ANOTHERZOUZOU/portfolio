@@ -2499,16 +2499,6 @@ const STACKING_CARDS = [
       en: "A “5th Anniversary” mark, a 0%-interest headline and entering 3D coins, gift boxes and coupons quickly build a celebratory, promotional mood. A drop-down panel carries the benefit details, clearly presenting installment offers and credit-limit perks, with a button tap animation reinforcing conversion.",
     },
   },
-  {
-    id: 5,
-    video: "/xiangmu/5.mp4",
-    background: "/figma/credmex/stacking-phone/fixed-background-green.png",
-    title: { zh: "妇女节大促活动", en: "Women's Day Campaign" },
-    desc: {
-      zh: "以节日氛围建立活动情绪，通过信封展开、卡券领取、礼花反馈等动效串联权益领取流程，突出“25%降息”利益点，增强节日专属感与转化引导。",
-      en: "Festive atmosphere sets the emotional tone; envelope-opening, coupon-claim and confetti animations string together the benefit-claim flow, highlighting the “25% rate cut” and enhancing the sense of a holiday-exclusive offer and conversion guidance.",
-    },
-  },
 ];
 const STACKING_N = STACKING_CARDS.length;
 const STACKING_WRAPPER_VH = 960;
