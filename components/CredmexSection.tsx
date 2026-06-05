@@ -4200,31 +4200,41 @@ function InviteRankingShowcaseSection({ scale }: { scale?: number }) {
     };
   }, []);
 
-  // 往上滑时底部两个圆角逐渐加大 (参考 InviteRankingSection 顶部圆角的滚动驱动写法).
-  // section 是 overflow-hidden, 圆角会把内容一起裁出圆角, 露出下方黑色背景.
+  // 往上滑时底部两个圆角逐渐加大: 用实时 getBoundingClientRect 直接驱动,
+  // 不走 ScrollTrigger —— 上方多个重型 pin 模块的 pin-spacer 布局结算晚于挂载,
+  // 会让 ScrollTrigger 的 start/end 像素位置算偏, 导致圆角卡在终点 120 不回弹。
+  // section 是 overflow-hidden, 圆角会把内容一起裁出圆角, 露出下方黑色背景。
+  // 进度语义: section 底边从视口底(start) 滑到视口顶(end), 圆角 0 → 120。
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => {
-      gsap.set(section, {
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
-      });
-      gsap.to(section, {
-        borderBottomLeftRadius: 120,
-        borderBottomRightRadius: 120,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "bottom bottom",
-          end: "bottom top",
-          scrub: 1.2,
-          invalidateOnRefresh: true,
-        },
-      });
-    }, section);
-    return () => ctx.revert();
+    const node = sectionRef.current;
+    if (!node) return;
+    let raf = 0;
+
+    const apply = () => {
+      raf = 0;
+      const rect = node.getBoundingClientRect();
+      const vh = window.innerHeight || FRAME_H;
+      const exitProgress = vh > 0
+        ? Math.max(0, Math.min(1, (vh - rect.bottom) / vh))
+        : 0;
+      const radius = 120 * exitProgress;
+      node.style.borderBottomLeftRadius = `${radius}px`;
+      node.style.borderBottomRightRadius = `${radius}px`;
+    };
+
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(apply);
+    };
+
+    apply();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
   }, []);
 
   useEffect(() => {

@@ -1062,7 +1062,7 @@ body {
 
 .jobySafetyStickyWrapper {
   width: 100%;
-  height: 1350vh; /* 滚动步幅: 越大每张卡片切换需滚动越长 */
+  height: 800vh; /* 滚动步幅: 越大每张卡片切换需滚动越长 */
   position: relative;
 }
 
@@ -1388,7 +1388,7 @@ body {
   }
 
   .jobySafetyStickyWrapper {
-    height: 1350lvh;
+    height: 800lvh;
   }
 
   .jobySafetySlidesContainer {
