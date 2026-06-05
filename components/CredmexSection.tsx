@@ -1746,6 +1746,7 @@ function ProductSection() {
               width: "auto",
               transform: "translate3d(100vw, 0, 0)",
               willChange: "transform",
+              filter: "grayscale(1)",
             }}
           />
         </div>
