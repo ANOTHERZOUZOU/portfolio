@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 154.07 154.07" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Mask group">
+<mask id="mask0_0_88" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="155" height="155">
+<rect id="Rectangle 512" x="0.253404" y="0.253404" width="153.563" height="153.563" rx="14.9508" fill="var(--fill-0, #FF7DAB)" stroke="var(--stroke-0, white)" stroke-width="0.506808"/>
+</mask>
+<g mask="url(#mask0_0_88)">
+<circle id="Ellipse 145" cx="153.815" cy="-9.37637" r="86.4107" fill="var(--fill-0, #AC98FF)"/>
+<circle id="Ellipse 146" cx="3.80137" cy="163.445" r="86.4107" fill="var(--fill-0, #F0FFBB)"/>
+</g>
+</g>
+</svg>

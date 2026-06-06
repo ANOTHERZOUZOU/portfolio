@@ -25,7 +25,7 @@ const TEL_DISPLAY = "188\u00a0\u00a04270\u00a0\u00a01237";
 // 与下拉菜单目录一致: 带罗马序号的完整章节导航 (双语)。
 const NAV: { zh: string; en: string; index: string; href: string }[] = [
   { zh: "经历", en: "Experience", index: "I", href: "#experience" },
-  { zh: "品牌宣传", en: "Brand Marketing", index: "II", href: "#brand" },
+  { zh: "品牌宣传", en: "Brand Marketing", index: "II", href: "#brand-center" },
   { zh: "产品构建", en: "Product Building", index: "III", href: "#product" },
   { zh: "运营活动", en: "Campaigns", index: "IV", href: "#events" },
   { zh: "素材库搭建", en: "Asset Library", index: "V", href: "#material" },
