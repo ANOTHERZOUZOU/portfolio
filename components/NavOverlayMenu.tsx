@@ -450,7 +450,7 @@ export function NavOverlayMenu({
             </div>
 
             {/* 左侧目录 */}
-            <nav className="pointer-events-auto absolute left-10 top-[120px] w-[130px]">
+            <nav className="pointer-events-auto absolute left-10 top-[120px] w-[250px]">
               <ul
                 className={[
                   "flex flex-col s4-nav-light",
