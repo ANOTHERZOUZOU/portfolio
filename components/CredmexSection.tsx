@@ -1875,8 +1875,8 @@ function BrandAssetsSection() {
               {BRAND_ASSET_CARDS.map((_, i) => (
                 <span
                   key={i}
-                  className="h-[4px] w-[40px] rounded-full transition-colors duration-300"
-                  style={{ backgroundColor: i === active ? "#C7FC07" : "#D9D9D9" }}
+                  className="h-[3px] w-[40px] rounded-full transition-colors duration-300"
+                  style={{ backgroundColor: i === active ? "#C7FC07" : "#5A5A5A" }}
                 />
               ))}
             </div>
