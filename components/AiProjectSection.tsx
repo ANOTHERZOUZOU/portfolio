@@ -140,8 +140,8 @@ export default function AiProjectSection({ id = "ai" }: { id?: string }) {
           text="Vibe Coding"
           title={t("AI 驱动\n设计重构", "AI-DRIVEN\nDESIGN, REIMAGINED")}
           description={t(
-            "用 AI 与 Design Token 重构海外业务的设计流程 —— 跨语言文案处理与设计规范系统化的完整实践。",
-            "Rebuilding the design workflow for overseas business with AI and design tokens — an end-to-end practice in cross-language copy handling and systematized design standards."
+            "用 AI 与 Design Token 重构海外业务的设计流程 —— 跨语言文案处理与设计规范系统化的完整实践",
+            "Rebuilding the design workflow for overseas business with AI and design tokens — an end-to-end practice in cross-language copy handling and systematized design standards"
           )}
         />
       </div>

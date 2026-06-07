@@ -74,8 +74,8 @@ const TIMELINE_ITEMS: TimelineYearItem[] = [
     titles: [{ zh: "The Foundation", en: "The Foundation" }],
     descriptions: [
       {
-        zh: "吉林动画学院 · 视觉传达设计 ｜ 2017.09 – 2021.07\n在视觉传达设计的系统训练中，建立了对版式、品牌、图形与信息表达的基础理解。四年的设计学习让我开始关注：设计不仅是视觉呈现，更是信息如何被组织、被理解，并最终被感知。",
-        en: "Jilin Animation Institute · Visual Communication Design ｜ 2017.09 – 2021.07\nThrough systematic training in visual communication design, I built a foundational understanding of layout, branding, graphics, and information expression. Four years of study taught me that design is not only visual presentation, but how information is organized, understood, and ultimately perceived.",
+        zh: "吉林动画学院 · 视觉传达设计 ｜ 2017.09 – 2021.07\n在视觉传达设计的系统训练中，建立了对版式、品牌、图形与信息表达的基础理解。四年的设计学习让我开始关注：设计不仅是视觉呈现，更是信息如何被组织、被理解，并最终被感知",
+        en: "Jilin Animation Institute · Visual Communication Design ｜ 2017.09 – 2021.07\nThrough systematic training in visual communication design, I built a foundational understanding of layout, branding, graphics, and information expression. Four years of study taught me that design is not only visual presentation, but how information is organized, understood, and ultimately perceived",
       },
     ],
   },
@@ -88,12 +88,12 @@ const TIMELINE_ITEMS: TimelineYearItem[] = [
     ],
     descriptions: [
       {
-        zh: "北京世纪好未来科技有限公司 · 设计实习生 ｜ 2021.01 – 2021.07\n从脑科学实验室相关产品开始进入真实业务场景，参与 Mental-Bridge 教育知网、云梯计划小程序、阅读表达内容推荐系统等项目设计执行。同时对接小猴 AI 课、学而思培优、学而思网校等业务线，支持产品与运营设计工作，逐步理解设计在教育科技产品中的落地方式。",
-        en: "Beijing Century TAL Education Technology Co., Ltd. · Design Intern ｜ 2021.01 – 2021.07\nStarting with brain-science lab products, I stepped into real business scenarios, contributing design execution to projects like the Mental-Bridge education knowledge base, the Cloud Ladder mini program, and the reading & expression content recommendation system. Working across lines such as Xiaohou AI Class, XES Peiyou, and XES Online School, I gradually understood how design takes shape in edtech products.",
+        zh: "北京世纪好未来科技有限公司 · 设计实习生 ｜ 2021.01 – 2021.07\n从脑科学实验室相关产品开始进入真实业务场景，参与 Mental-Bridge 教育知网、云梯计划小程序、阅读表达内容推荐系统等项目设计执行。同时对接小猴 AI 课、学而思培优、学而思网校等业务线，支持产品与运营设计工作，逐步理解设计在教育科技产品中的落地方式",
+        en: "Beijing Century TAL Education Technology Co., Ltd. · Design Intern ｜ 2021.01 – 2021.07\nStarting with brain-science lab products, I stepped into real business scenarios, contributing design execution to projects like the Mental-Bridge education knowledge base, the Cloud Ladder mini program, and the reading & expression content recommendation system. Working across lines such as Xiaohou AI Class, XES Peiyou, and XES Online School, I gradually understood how design takes shape in edtech products",
       },
       {
-        zh: "小糖互联（北京）网络科技有限公司 · 产品 UI 设计师 ｜ 2021.07 – 2024.05\n围绕糖豆 App 与会员业务展开长期设计实践，从 0 搭建会员权益功能，主导整体视觉风格与运营设计支持。参与主站功能迭代、页面改版、用户调研、趋势分析与设计规范制定，也负责天猫、拼多多会员店铺、官网及课程业务相关设计。这个阶段让我从执行走向系统化思考，开始关注产品体验、运营转化与设计一致性之间的关系。",
-        en: "Xiaotang Internet (Beijing) Network Technology Co., Ltd. · Product UI Designer ｜ 2021.07 – 2024.05\nI carried out long-term design practice around the Tangdou App and its membership business, building the membership benefits system from scratch and leading the overall visual style and operations design support. Across main-site iteration, redesigns, user research, trend analysis, and design-standards work—plus Tmall/Pinduoduo stores, the official site, and course business—I moved from execution toward systematic thinking about experience, conversion, and design consistency.",
+        zh: "小糖互联（北京）网络科技有限公司 · 产品 UI 设计师 ｜ 2021.07 – 2024.05\n围绕糖豆 App 与会员业务展开长期设计实践，从 0 搭建会员权益功能，主导整体视觉风格与运营设计支持。参与主站功能迭代、页面改版、用户调研、趋势分析与设计规范制定，也负责天猫、拼多多会员店铺、官网及课程业务相关设计。这个阶段让我从执行走向系统化思考，开始关注产品体验、运营转化与设计一致性之间的关系",
+        en: "Xiaotang Internet (Beijing) Network Technology Co., Ltd. · Product UI Designer ｜ 2021.07 – 2024.05\nI carried out long-term design practice around the Tangdou App and its membership business, building the membership benefits system from scratch and leading the overall visual style and operations design support. Across main-site iteration, redesigns, user research, trend analysis, and design-standards work—plus Tmall/Pinduoduo stores, the official site, and course business—I moved from execution toward systematic thinking about experience, conversion, and design consistency",
       },
     ],
   },
@@ -103,8 +103,8 @@ const TIMELINE_ITEMS: TimelineYearItem[] = [
     titles: [{ zh: "The Exploration", en: "The Exploration" }],
     descriptions: [
       {
-        zh: "半糖去冰科技（北京）有限公司 · 产品 UI 设计师 ｜ 2024.05 – 2025.02\n作为葫芦时刻 App 业务制作人，负责基础业务搭建、商业变现跟进与新领域探索。结合智能体完成文案、业务流程与交互文档输出，并参与移动应用 ASO、UI 标准与规范维护。在付费业务、免费业务与轻应用业务的设计中，持续推动用户转化与会员增长。",
-        en: "Bantang Qubing Technology (Beijing) Co., Ltd. · Product UI Designer ｜ 2024.05 – 2025.02\nAs the business producer for the Hulu Moment App, I built core business features, followed through on monetization, and explored new domains. I leveraged AI agents to produce copy, workflows, and interaction docs, took part in mobile-app ASO and UI standards maintenance, and continually drove user conversion and membership growth across paid, free, and lightweight services.",
+        zh: "半糖去冰科技（北京）有限公司 · 产品 UI 设计师 ｜ 2024.05 – 2025.02\n作为葫芦时刻 App 业务制作人，负责基础业务搭建、商业变现跟进与新领域探索。结合智能体完成文案、业务流程与交互文档输出，并参与移动应用 ASO、UI 标准与规范维护。在付费业务、免费业务与轻应用业务的设计中，持续推动用户转化与会员增长",
+        en: "Bantang Qubing Technology (Beijing) Co., Ltd. · Product UI Designer ｜ 2024.05 – 2025.02\nAs the business producer for the Hulu Moment App, I built core business features, followed through on monetization, and explored new domains. I leveraged AI agents to produce copy, workflows, and interaction docs, took part in mobile-app ASO and UI standards maintenance, and continually drove user conversion and membership growth across paid, free, and lightweight services",
       },
     ],
   },
@@ -114,8 +114,8 @@ const TIMELINE_ITEMS: TimelineYearItem[] = [
     titles: [{ zh: "The Expansion", en: "The Expansion" }],
     descriptions: [
       {
-        zh: "领岳科技 · 高级 UI 设计师 ｜ 2025.02 – 至今\n负责墨西哥业务端内 UI、运营活动交互与视觉设计，参与官网品牌宣传及组内资源站建设；同时支持波兰业务 Web 与 App 从 0 到 1 的搭建设计，并完成组件库搭建与维护；日本理财业务上线前设计支持，围绕页面结构、模块补充与视觉一致性进行优化调整，配合业务完成开业发布。",
-        en: "Lingyue Technology · Senior UI Designer ｜ 2025.02 – Present\nI own in-app UI, campaign interaction, and visual design for the Mexico business, and contribute to brand marketing and the team's asset library; I also support the Poland business in building its Web and App from zero to one and maintain the component library, and provided pre-launch design support for the Japan wealth-management business—refining page structure, supplementing modules, and ensuring visual consistency—to help it reach its public launch.",
+        zh: "领岳科技 · 高级 UI 设计师 ｜ 2025.02 – 至今\n负责墨西哥业务端内 UI、运营活动交互与视觉设计，参与官网品牌宣传及组内资源站建设；同时支持波兰业务 Web 与 App 从 0 到 1 的搭建设计，并完成组件库搭建与维护；日本理财业务上线前设计支持，围绕页面结构、模块补充与视觉一致性进行优化调整，配合业务完成开业发布",
+        en: "Lingyue Technology · Senior UI Designer ｜ 2025.02 – Present\nI own in-app UI, campaign interaction, and visual design for the Mexico business, and contribute to brand marketing and the team's asset library; I also support the Poland business in building its Web and App from zero to one and maintain the component library, and provided pre-launch design support for the Japan wealth-management business—refining page structure, supplementing modules, and ensuring visual consistency—to help it reach its public launch",
       },
     ],
   },
@@ -125,8 +125,8 @@ const TIMELINE_ITEMS: TimelineYearItem[] = [
     titles: [{ zh: "The Frontier", en: "The Frontier" }],
     descriptions: [
       {
-        zh: "领岳科技 · 高级 UI 设计师 ｜ 当前进行中\n当前也在将 AI 引入设计流程，通过 vibe coding、智能化辅助与设计自动化探索，提升从概念到落地的效率。",
-        en: "Lingyue Technology · Senior UI Designer ｜ Now\nCurrently I'm bringing AI into the design workflow—through vibe coding, intelligent assistance, and design automation—to improve efficiency from concept to delivery.",
+        zh: "领岳科技 · 高级 UI 设计师 ｜ 当前进行中\n当前也在将 AI 引入设计流程，通过 vibe coding、智能化辅助与设计自动化探索，提升从概念到落地的效率",
+        en: "Lingyue Technology · Senior UI Designer ｜ Now\nCurrently I'm bringing AI into the design workflow—through vibe coding, intelligent assistance, and design automation—to improve efficiency from concept to delivery",
       },
     ],
   },
@@ -134,27 +134,27 @@ const TIMELINE_ITEMS: TimelineYearItem[] = [
 
 const NARRATIVES: BilingualText[][] = [
   [
-    { zh: "屏幕之上，不只是界面。", en: "On the screen, there's more than an interface." },
-    { zh: "是被反复拆解的问题，是用户停顿的瞬间，也是路径中那些不易察觉的阻力。", en: "It's the problems pulled apart again and again, the moments where users pause, and the friction along the path that's easy to overlook." },
+    { zh: "屏幕之上，不只是界面", en: "On the screen, there's more than an interface" },
+    { zh: "是被反复拆解的问题，是用户停顿的瞬间，也是路径中那些不易察觉的阻力", en: "It's the problems pulled apart again and again, the moments where users pause, and the friction along the path that's easy to overlook" },
   ],
   [
-    { zh: "在界面出现之前，设计已经开始。", en: "Design begins long before the interface appears." },
-    { zh: "它发生在结构、节奏、情绪与判断之间，一遍又一遍被推翻、重组和确认。", en: "It happens between structure, rhythm, emotion, and judgment — overturned, reassembled, and confirmed, again and again." },
+    { zh: "在界面出现之前，设计已经开始", en: "Design begins long before the interface appears" },
+    { zh: "它发生在结构、节奏、情绪与判断之间，一遍又一遍被推翻、重组和确认", en: "It happens between structure, rhythm, emotion, and judgment — overturned, reassembled, and confirmed, again and again" },
   ],
   [
-    { zh: "这份作品集，记录了一些被解决的问题，也记录了我理解设计的方式。", en: "This portfolio records some of the problems I've solved, and the way I understand design." },
-    { zh: "从视觉系统到动态交互，从弹窗到页面，我尝试让复杂的业务目标被更清楚地表达，让用户更快理解、更愿意继续，也更容易感受到设计背后的意图。", en: "From visual systems to motion and interaction, from modals to full pages, I try to express complex business goals more clearly — so users understand faster, feel more willing to continue, and can more easily sense the intent behind the design." },
-    { zh: "设计始于一个值得被解决的问题。随后，它成为结构，成为视觉，成为动作，最终成为体验中被记住的那一瞬间。", en: "Design starts with a problem worth solving. Then it becomes structure, becomes visuals, becomes motion — and finally, the one moment in an experience that gets remembered." },
+    { zh: "这份作品集，记录了一些被解决的问题，也记录了我理解设计的方式", en: "This portfolio records some of the problems I've solved, and the way I understand design" },
+    { zh: "从视觉系统到动态交互，从弹窗到页面，我尝试让复杂的业务目标被更清楚地表达，让用户更快理解、更愿意继续，也更容易感受到设计背后的意图", en: "From visual systems to motion and interaction, from modals to full pages, I try to express complex business goals more clearly — so users understand faster, feel more willing to continue, and can more easily sense the intent behind the design" },
+    { zh: "设计始于一个值得被解决的问题。随后，它成为结构，成为视觉，成为动作，最终成为体验中被记住的那一瞬间", en: "Design starts with a problem worth solving. Then it becomes structure, becomes visuals, becomes motion — and finally, the one moment in an experience that gets remembered" },
   ],
 ];
 
 const BODY_TEXTS: BilingualText[][] = [
   [
-    { zh: "设计不是在画面上不断增加什么，而是在复杂信息中建立秩序，在模糊需求中找到清晰的表达方式。", en: "Design isn't about endlessly adding things to the screen; it's about bringing order to complex information and finding a clear way to express ambiguous needs." },
-    { zh: "我并不急于寻找答案。先观察、提问、推翻，再重新组织。一个按钮为什么被点击，一个流程为什么被放弃，一个动效为什么让人感到安心——这些细微的反应，往往比画面本身更接近设计的核心。", en: "I'm in no rush to find answers. First observe, question, overturn, then reorganize. Why a button gets clicked, why a flow gets abandoned, why a motion feels reassuring — these subtle reactions are often closer to the core of design than the visuals themselves." },
+    { zh: "设计不是在画面上不断增加什么，而是在复杂信息中建立秩序，在模糊需求中找到清晰的表达方式", en: "Design isn't about endlessly adding things to the screen; it's about bringing order to complex information and finding a clear way to express ambiguous needs" },
+    { zh: "我并不急于寻找答案。先观察、提问、推翻，再重新组织。一个按钮为什么被点击，一个流程为什么被放弃，一个动效为什么让人感到安心——这些细微的反应，往往比画面本身更接近设计的核心", en: "I'm in no rush to find answers. First observe, question, overturn, then reorganize. Why a button gets clicked, why a flow gets abandoned, why a motion feels reassuring — these subtle reactions are often closer to the core of design than the visuals themselves" },
   ],
   [
-    { zh: "信息被梳理，行动被引导，品牌被感知，信任也在短短几秒内被建立。每一个像素、每一次转场、每一个反馈，都应有它存在的理由。", en: "Information gets organized, action gets guided, the brand gets perceived, and trust is built within a few short seconds. Every pixel, every transition, every piece of feedback should have a reason to exist." },
+    { zh: "信息被梳理，行动被引导，品牌被感知，信任也在短短几秒内被建立。每一个像素、每一次转场、每一个反馈，都应有它存在的理由", en: "Information gets organized, action gets guided, the brand gets perceived, and trust is built within a few short seconds. Every pixel, every transition, every piece of feedback should have a reason to exist" },
   ],
 ];
 

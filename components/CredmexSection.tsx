@@ -1208,7 +1208,7 @@ function OverviewSection({ scale }: { scale?: number }) {
             >
               <span>{t("Credmex 是一个", "Credmex is an ")}</span>
               <span style={{ color: "#ECECEC" }}>{t("面向墨西哥市场的线上个人贷款 / 小额信贷平台", "online personal & micro-lending platform for the Mexican market")}</span>
-              <span>{t("，主要通过手机 App 提供快速贷款服务。", ", delivering fast loan services primarily through its mobile app.")}</span>
+              <span>{t("，主要通过手机 App 提供快速贷款服务", ", delivering fast loan services primarily through its mobile app")}</span>
             </p>
           </div>
 
@@ -1290,21 +1290,21 @@ const BRAND_CENTER_PROBLEMS = [
     title: { zh: "假冒干扰", en: "Counterfeit Noise" },
     body: {
       zh: "海外金融产品市场中，假冒 App 和相似产品容易干扰用户判断，用户难以快速确认官方品牌",
-      en: "In overseas fintech markets, fake apps and look-alikes blur user judgment, making it hard to quickly confirm the official brand.",
+      en: "In overseas fintech markets, fake apps and look-alikes blur user judgment, making it hard to quickly confirm the official brand",
     },
   },
   {
     title: { zh: "品牌识别", en: "Brand Recognition" },
     body: {
       zh: "Logo、App Icon、品牌色和活动视觉分散在不同触点中，缺少统一的官方品牌记忆",
-      en: "Logo, app icon, brand colors and campaign visuals are scattered across touchpoints, lacking a unified official brand memory.",
+      en: "Logo, app icon, brand colors and campaign visuals are scattered across touchpoints, lacking a unified official brand memory",
     },
   },
   {
     title: { zh: "信任成本", en: "Trust Cost" },
     body: {
       zh: "金融产品天然存在信任门槛，用户需要通过稳定、清晰的品牌表达建立安全感",
-      en: "Financial products carry an inherent trust barrier; users need stable, clear brand expression to build a sense of security.",
+      en: "Financial products carry an inherent trust barrier; users need stable, clear brand expression to build a sense of security",
     },
   },
 ];
@@ -1320,21 +1320,21 @@ const BRAND_CENTER_STRATEGIES = [
     title: { zh: "系统化品牌资产", en: "Systematic Brand Assets" },
     body: {
       zh: "将 Logo、App Icon、品牌色和辅助图形拆分为核心识别、产品入口和传播延展三类资产，建立清晰的品牌资产结构",
-      en: "Split logo, app icon, brand colors and supporting graphics into core identity, product entry and communication assets for a clear structure.",
+      en: "Split logo, app icon, brand colors and supporting graphics into core identity, product entry and communication assets for a clear structure",
     },
   },
   {
     title: { zh: "多触点一致表达", en: "Consistent Expression" },
     body: {
       zh: "通过不同背景、尺寸和触点的展示，说明品牌资产在实际场景中的使用方式，保证官网、App 和营销传播中的表达一致",
-      en: "Show assets across backgrounds, sizes and touchpoints to keep expression consistent across the site, app and marketing.",
+      en: "Show assets across backgrounds, sizes and touchpoints to keep expression consistent across the site, app and marketing",
     },
   },
   {
     title: { zh: "可复用传播元素", en: "Reusable Elements" },
     body: {
       zh: "从 Logo 字形和品牌色中提取可复用图形元素，支持 Banner、弹窗、活动页和社媒素材中的持续应用",
-      en: "Extract reusable graphic elements from the logotype and brand colors for banners, popups, campaign pages and social assets.",
+      en: "Extract reusable graphic elements from the logotype and brand colors for banners, popups, campaign pages and social assets",
     },
   },
 ];
@@ -1695,7 +1695,7 @@ const BRAND_ASSET_CARDS: BrandAssetCard[] = [
     zh: "核心品牌识别",
     desc: {
       zh: "建立 Credmex 的官方品牌识别，让用户能快速认出正版品牌",
-      en: "Establish Credmex's official brand identity so users can quickly recognize the authentic brand.",
+      en: "Establish Credmex's official brand identity so users can quickly recognize the authentic brand",
     },
     visual: { type: "logoGrid" },
   },
@@ -1705,7 +1705,7 @@ const BRAND_ASSET_CARDS: BrandAssetCard[] = [
     zh: "移动端产品入口资产",
     desc: {
       zh: "帮助用户在应用商店和手机桌面中快速识别官方 Credmex App",
-      en: "Help users quickly identify the official Credmex App in app stores and on the home screen.",
+      en: "Help users quickly identify the official Credmex App in app stores and on the home screen",
     },
     visual: { type: "image", src: "/brand-center/asset-02.webp" },
   },
@@ -1715,7 +1715,7 @@ const BRAND_ASSET_CARDS: BrandAssetCard[] = [
     zh: "品牌色彩资产",
     desc: {
       zh: "通过稳定的品牌色建立识别度，同时区分品牌承载、重点信息和行动引导",
-      en: "Build recognition with stable brand colors while distinguishing brand carriers, key info and calls to action.",
+      en: "Build recognition with stable brand colors while distinguishing brand carriers, key info and calls to action",
     },
     visual: { type: "image", src: "/brand-center/asset-03.png" },
   },
@@ -1725,7 +1725,7 @@ const BRAND_ASSET_CARDS: BrandAssetCard[] = [
     zh: "辅助图形资产",
     desc: {
       zh: "让品牌不只停留在 Logo 层面，而是可以延展到官网、活动页、Banner、弹窗和社媒传播中",
-      en: "Extend the brand beyond the logo into the website, campaign pages, banners, popups and social media.",
+      en: "Extend the brand beyond the logo into the website, campaign pages, banners, popups and social media",
     },
     visual: { type: "image", src: "/brand-center/asset-04.png" },
   },
@@ -1735,7 +1735,7 @@ const BRAND_ASSET_CARDS: BrandAssetCard[] = [
     zh: "品牌应用场景资产",
     desc: {
       zh: "展示品牌资产如何在真实产品和营销场景中保持统一表达",
-      en: "Show how brand assets stay consistent across real products and marketing scenarios.",
+      en: "Show how brand assets stay consistent across real products and marketing scenarios",
     },
     visual: { type: "image", src: "/brand-center/asset-05.webp" },
   },
@@ -1952,7 +1952,7 @@ const BRAND_NARRATIVE_CARDS: BrandNarrativeCard[] = [
     title: { zh: "组织内容节奏", en: "Organize the content rhythm" },
     desc: {
       zh: "通过 Framer 将 Logo、App Icon、品牌色和辅助图形按浏览顺序串联起来，让品牌资产从单点展示变成连续叙事",
-      en: "With Framer, the logo, app icon, brand colors and graphic assets are linked in browsing order, turning brand assets from isolated showcases into a continuous narrative.",
+      en: "With Framer, the logo, app icon, brand colors and graphic assets are linked in browsing order, turning brand assets from isolated showcases into a continuous narrative",
     },
   },
   {
@@ -1961,7 +1961,7 @@ const BRAND_NARRATIVE_CARDS: BrandNarrativeCard[] = [
     title: { zh: "强化动态呈现", en: "Strengthen dynamic presentation" },
     desc: {
       zh: "滑动预览让模块之间自然衔接，品牌元素在切换中逐步出现，增强 Brand Center 的浏览完成度和品牌记忆点",
-      en: "Scroll previews connect modules naturally and reveal brand elements step by step, improving the Brand Center's completion rate and brand recall.",
+      en: "Scroll previews connect modules naturally and reveal brand elements step by step, improving the Brand Center's completion rate and brand recall",
     },
   },
   {
@@ -1970,7 +1970,7 @@ const BRAND_NARRATIVE_CARDS: BrandNarrativeCard[] = [
     title: { zh: "降低实现成本", en: "Lower the cost of delivery" },
     desc: {
       zh: "相比完全依赖开发实现，Framer 可以更快完成页面节奏、动效衔接和交互预览验证，在较低成本下实现接近官网真实效果的动态展示",
-      en: "Compared with relying entirely on engineering, Framer delivers page rhythm, motion transitions and interactive previews faster, achieving a near-production dynamic showcase at lower cost.",
+      en: "Compared with relying entirely on engineering, Framer delivers page rhythm, motion transitions and interactive previews faster, achieving a near-production dynamic showcase at lower cost",
     },
   },
 ];
@@ -2066,7 +2066,7 @@ function BrandSection({ scale = 1 }: { scale?: number }) {
             color: "#949494",
           },
           { text: t("搭建具有品牌识别度与传播力", "build a recognizable, high-impact"), color: "#ECECEC" },
-          { text: t("的官网宣传页面。", " marketing website."), color: "#949494" },
+          { text: t("的官网宣传页面", " marketing website"), color: "#949494" },
         ]}
       />
 
@@ -2229,14 +2229,14 @@ function MaterialLibrarySection({ scale = 1 }: { scale?: number }) {
         descriptionParts={[
           {
             text: t(
-              "系统盘点并归类现有品牌资产，沉淀视觉规范与高频素材，形成标准化素材库，",
-              "Systematically auditing and categorizing existing brand assets, codifying visual standards and high-frequency materials into a standardized asset library to "
+              "从品牌规范到营销素材，统一组织与管理设计资产，",
+              "From brand guidelines to marketing materials, unifying the organization and management of design assets to "
             ),
             color: "#949494",
           },
-          { text: t("提升", "improve"), color: "#ECECEC" },
-          { text: t("后续", " the efficiency of"), color: "#949494" },
-          { text: t("素材使用效率", " future asset usage"), color: "#ECECEC" },
+          { text: t("提升团队复用效率", "improve team reuse efficiency"), color: "#ECECEC" },
+          { text: t("，", " and "), color: "#949494" },
+          { text: t("降低重复设计成本", "reduce redundant design costs"), color: "#ECECEC" },
         ]}
       />
 
@@ -2480,7 +2480,7 @@ function ProductSection({ scale = 1 }: { scale?: number }) {
               {t("从需求出发，系统梳理产品逻辑与用户路径，", "Starting from real needs, systematically mapping product logic and user journeys to ")}
             </span>
             <span style={{ color: "#ECECEC" }}>{t("构建清晰、高效、美观", "build a clear, efficient and elegant")}</span>
-            <span style={{ color: "#949494" }}>{t("的 APP 功能体验。", " in-app feature experience.")}</span>
+            <span style={{ color: "#949494" }}>{t("的 APP 功能体验", " in-app feature experience")}</span>
           </p>
         </div>
 
@@ -3220,8 +3220,8 @@ const STACKING_CARDS = [
     background: "/figma/credmex/stacking-phone/fixed-background-green.png",
     title: { zh: "降息优惠弹窗", en: "Rate-Cut Offer Popup" },
     desc: {
-      zh: "围绕降息券领取场景，设计动态弹窗反馈。通过券包弹出动效，强化优惠到账的惊喜感，并以清晰的权益信息和按钮引导完成后续转化。",
-      en: "A dynamic popup designed around the rate-cut coupon claim flow. An animated coupon-pack reveal heightens the delight of receiving the offer, while clear benefit info and a guiding button drive follow-up conversion.",
+      zh: "围绕降息券领取场景，设计动态弹窗反馈。通过券包弹出动效，强化优惠到账的惊喜感，并以清晰的权益信息和按钮引导完成后续转化",
+      en: "A dynamic popup designed around the rate-cut coupon claim flow. An animated coupon-pack reveal heightens the delight of receiving the offer, while clear benefit info and a guiding button drive follow-up conversion",
     },
   },
   {
@@ -3230,8 +3230,8 @@ const STACKING_CARDS = [
     background: "/figma/credmex/stacking-phone/fixed-background-raster.png",
     title: { zh: "优惠挽留弹窗", en: "Retention Offer Popup" },
     desc: {
-      zh: "围绕用户流失节点设计动态挽留反馈，通过优惠额度对比与倒计时强化限时感，突出权益升级感知，提升用户留存与即时转化。",
-      en: "A dynamic retention popup built around churn moments. Offer comparisons and a countdown reinforce urgency and the sense of upgraded benefits, boosting retention and instant conversion.",
+      zh: "围绕用户流失节点设计动态挽留反馈，通过优惠额度对比与倒计时强化限时感，突出权益升级感知，提升用户留存与即时转化",
+      en: "A dynamic retention popup built around churn moments. Offer comparisons and a countdown reinforce urgency and the sense of upgraded benefits, boosting retention and instant conversion",
     },
   },
   {
@@ -3240,8 +3240,8 @@ const STACKING_CARDS = [
     background: "/figma/credmex/stacking-phone/fixed-background-green.png",
     title: { zh: "成长体系等级切换", en: "Loyalty Tier Switching" },
     desc: {
-      zh: "成长体系中的等级切换体验，让用户可以清晰查看不同等级对应的权益和升级路径。通过视觉层级、标签状态和权益对比，帮助用户快速理解当前等级与下一等级之间的差异，增强成长激励感。",
-      en: "A tier-switching experience within the loyalty system that lets users clearly view the benefits and upgrade path of each level. Visual hierarchy, tag states and benefit comparisons help users quickly grasp the gap between their current and next tier, strengthening progression motivation.",
+      zh: "成长体系中的等级切换体验，让用户可以清晰查看不同等级对应的权益和升级路径。通过视觉层级、标签状态和权益对比，帮助用户快速理解当前等级与下一等级之间的差异，增强成长激励感",
+      en: "A tier-switching experience within the loyalty system that lets users clearly view the benefits and upgrade path of each level. Visual hierarchy, tag states and benefit comparisons help users quickly grasp the gap between their current and next tier, strengthening progression motivation",
     },
   },
   {
@@ -3250,8 +3250,8 @@ const STACKING_CARDS = [
     background: "/figma/credmex/stacking-phone/fixed-background-raster.png",
     title: { zh: "5周年大促活动", en: "5th Anniversary Campaign" },
     desc: {
-      zh: "通过“5周年”标识、0%利息标题与3D金币、礼盒、优惠券等资产入场，快速建立庆典氛围与促销感；以面板下拉展开承接权益信息，清晰呈现分期优惠与额度提升福利，最终通过按钮点击动效强化转化引导。",
-      en: "A “5th Anniversary” mark, a 0%-interest headline and entering 3D coins, gift boxes and coupons quickly build a celebratory, promotional mood. A drop-down panel carries the benefit details, clearly presenting installment offers and credit-limit perks, with a button tap animation reinforcing conversion.",
+      zh: "通过“5周年”标识、0%利息标题与3D金币、礼盒、优惠券等资产入场，快速建立庆典氛围与促销感；以面板下拉展开承接权益信息，清晰呈现分期优惠与额度提升福利，最终通过按钮点击动效强化转化引导",
+      en: "A “5th Anniversary” mark, a 0%-interest headline and entering 3D coins, gift boxes and coupons quickly build a celebratory, promotional mood. A drop-down panel carries the benefit details, clearly presenting installment offers and credit-limit perks, with a button tap animation reinforcing conversion",
     },
   },
 ];
@@ -3789,7 +3789,7 @@ function CreditSection({ scale }: { scale?: number }) {
                 <span style={{ color: "#ECECEC" }}> 80%</span>
                 <span style={{ color: "#949494" }}>{t("，复贷用户约为", " of their limit on average, while repeat users use around")}</span>
                 <span style={{ color: "#ECECEC" }}> 40%</span>
-                <span style={{ color: "#949494" }}>{t("，复贷场景仍有提升件均金额的空间。", " — leaving room to raise the average ticket size in repeat scenarios.")}</span>
+                <span style={{ color: "#949494" }}>{t("，复贷场景仍有提升件均金额的空间", " — leaving room to raise the average ticket size in repeat scenarios")}</span>
               </p>
             </div>
             <div className="flex flex-col" style={{ gap: 8 }}>
@@ -3797,8 +3797,8 @@ function CreditSection({ scale }: { scale?: number }) {
                 {t("设计策略", "Design Strategy")}
               </p>
               <p style={{ fontSize: 14, fontWeight: 500, margin: 0, lineHeight: 1.5 }}>
-                <span style={{ color: "#949494" }}>{t("界面从原有的单一金额编辑方式，优化为“手动输入 + 推荐额度快捷选择”的组合模式。用户既可以自由调整借款金额，也可以直接选择系统推荐的额度卡片。", "The interface evolved from a single amount-editing field into a combined “manual input + quick recommended-limit selection” model. Users can freely adjust the loan amount or simply tap a system-recommended limit card.")}</span>
-                <span style={{ color: "#ECECEC" }}>{t("通过突出推荐标签、选中态反馈与金额层级对比，让用户在高信息密度的金融场景中快速识别更优选项。", "Highlighted recommendation tags, selected-state feedback and amount-hierarchy contrast help users quickly spot the better option in an information-dense financial context.")}</span>
+                <span style={{ color: "#949494" }}>{t("界面从原有的单一金额编辑方式，优化为“手动输入 + 推荐额度快捷选择”的组合模式。用户既可以自由调整借款金额，也可以直接选择系统推荐的额度卡片", "The interface evolved from a single amount-editing field into a combined “manual input + quick recommended-limit selection” model. Users can freely adjust the loan amount or simply tap a system-recommended limit card")}</span>
+                <span style={{ color: "#ECECEC" }}>{t("通过突出推荐标签、选中态反馈与金额层级对比，让用户在高信息密度的金融场景中快速识别更优选项", "Highlighted recommendation tags, selected-state feedback and amount-hierarchy contrast help users quickly spot the better option in an information-dense financial context")}</span>
               </p>
             </div>
           </div>
@@ -3821,7 +3821,7 @@ function CreditSection({ scale }: { scale?: number }) {
                 {t("实验结果", "Results")}
               </p>
               <p style={{ fontSize: 14, color: "#949494", fontWeight: 500, margin: 0, lineHeight: 1.5 }}>
-                {t("实验观察时间：墨西哥时间 9.22 - 10.12，9.22 - 10%分流、9.29 - 30%分流、10.12 - 50%分流", "Observation window: Mexico time 9.22 - 10.12 (9.22 - 10% traffic, 9.29 - 30% traffic, 10.12 - 50% traffic).")}
+                {t("实验观察时间：墨西哥时间 9.22 - 10.12，9.22 - 10%分流、9.29 - 30%分流、10.12 - 50%分流", "Observation window: Mexico time 9.22 - 10.12 (9.22 - 10% traffic, 9.29 - 30% traffic, 10.12 - 50% traffic)")}
               </p>
               <p style={{ fontSize: 14, fontWeight: 500, margin: 0, lineHeight: 1.5 }}>
                 <span style={{ color: "#949494" }}>{t("阶段性结论（数据为相对 %）：", "Interim findings (figures are relative %):")}</span>{"\n"}
@@ -3831,10 +3831,10 @@ function CreditSection({ scale }: { scale?: number }) {
                 {t("拆场景来看，首贷优势更明显，当日下单率+3.89%，当日额度使用率+2.77%，当日放款效率+4.57%", "By scenario, the advantage is clearer for first-time borrowers — same-day order rate +3.89%, same-day credit utilization +2.77%, same-day disbursement efficiency +4.57%.")}
               </p>
               <p style={{ fontSize: 14, color: "#ECECEC", fontWeight: 500, margin: 0, lineHeight: 1.5 }}>
-                {t("实验结果显示，额度选择机制有效提升了用户额度选择效率，验证了推荐策略对关键转化路径的正向作用。", "Results show the limit-selection mechanism meaningfully improved how efficiently users pick a limit, validating the positive impact of the recommendation strategy on key conversion paths.")}
+                {t("实验结果显示，额度选择机制有效提升了用户额度选择效率，验证了推荐策略对关键转化路径的正向作用", "Results show the limit-selection mechanism meaningfully improved how efficiently users pick a limit, validating the positive impact of the recommendation strategy on key conversion paths")}
               </p>
               <p style={{ fontSize: 12, color: "#595959", fontWeight: 500, margin: 0, marginTop: 16 * s, lineHeight: 1.5 }}>
-                {t("*数据已做脱敏处理，仅保留核心趋势与设计验证结论", "*Data has been anonymized; only core trends and design-validation conclusions are retained.")}
+                {t("*数据已做脱敏处理，仅保留核心趋势与设计验证结论", "*Data has been anonymized; only core trends and design-validation conclusions are retained")}
               </p>
             </div>
           </div>
@@ -4016,7 +4016,7 @@ function RecommendSection({ scale }: { scale?: number }) {
               <p style={{ fontSize: 14, fontWeight: 500, margin: 0, lineHeight: 1.5 }}>
                 <span style={{ color: "#949494" }}>{t("在信贷额度选择场景中，用户需要判断", "When choosing a credit limit, users have to judge ")}</span>
                 <span style={{ color: "#ECECEC" }}>{t("“借多少更合适、是否满足优惠门槛、如何使用降息券”", "“how much to borrow, whether they meet the offer threshold, and how to use a rate-cut coupon”")}</span>
-                <span style={{ color: "#949494" }}>{t("等问题，决策成本较高。尤其是有降息券用户，当输入额度低于券的起用金额时，用户容易忽略优惠条件，导致降息券未被使用，也影响额度使用率与件均金额提升。", " — a high-cost decision. Coupon holders in particular tend to overlook the offer terms when their entered amount is below the coupon's minimum, leaving the rate-cut coupon unused and limiting gains in credit utilization and average ticket size.")}</span>
+                <span style={{ color: "#949494" }}>{t("等问题，决策成本较高。尤其是有降息券用户，当输入额度低于券的起用金额时，用户容易忽略优惠条件，导致降息券未被使用，也影响额度使用率与件均金额提升", " — a high-cost decision. Coupon holders in particular tend to overlook the offer terms when their entered amount is below the coupon's minimum, leaving the rate-cut coupon unused and limiting gains in credit utilization and average ticket size")}</span>
               </p>
             </div>
             <div className="flex flex-col" style={{ gap: 8 }}>
@@ -4024,11 +4024,11 @@ function RecommendSection({ scale }: { scale?: number }) {
                 {t("设计策略", "Design Strategy")}
               </p>
               <p style={{ fontSize: 14, fontWeight: 500, margin: 0, lineHeight: 1.5 }}>
-                <span style={{ color: "#949494" }}>{t("针对持有降息券的用户，在下单页点击修改额度后，若当前额度低于降息券起用金额，则在页面下方展示凑满减提示条，引导用户提升至满足优惠条件的推荐额度。", "For coupon holders, after tapping to edit the amount on the order page, if the current limit is below the coupon's minimum, a top-up hint bar appears at the bottom, guiding users to raise it to a recommended limit that qualifies for the offer.")}</span>
+                <span style={{ color: "#949494" }}>{t("针对持有降息券的用户，在下单页点击修改额度后，若当前额度低于降息券起用金额，则在页面下方展示凑满减提示条，引导用户提升至满足优惠条件的推荐额度", "For coupon holders, after tapping to edit the amount on the order page, if the current limit is below the coupon's minimum, a top-up hint bar appears at the bottom, guiding users to raise it to a recommended limit that qualifies for the offer")}</span>
                 {"\n\n"}
-                <span style={{ color: "#949494" }}>{t("用户点击提示条后，可一键应用推荐金额，减少手动计算与反复输入成本。", "Tapping the hint bar applies the recommended amount in one tap, cutting manual calculation and repeated input.")}</span>
+                <span style={{ color: "#949494" }}>{t("用户点击提示条后，可一键应用推荐金额，减少手动计算与反复输入成本", "Tapping the hint bar applies the recommended amount in one tap, cutting manual calculation and repeated input")}</span>
                 {"\n"}
-                <span style={{ color: "#ECECEC" }}>{t("同时保留手动输入能力，避免强制推荐，让用户在理解优惠价值的基础上自主决策。", "Manual input is preserved to avoid forced recommendations, letting users decide for themselves once they understand the value of the offer.")}</span>
+                <span style={{ color: "#ECECEC" }}>{t("同时保留手动输入能力，避免强制推荐，让用户在理解优惠价值的基础上自主决策", "Manual input is preserved to avoid forced recommendations, letting users decide for themselves once they understand the value of the offer")}</span>
               </p>
             </div>
           </div>
@@ -4051,17 +4051,17 @@ function RecommendSection({ scale }: { scale?: number }) {
               {t("实验结果", "Results")}
             </p>
             <p style={{ fontSize: 14, color: "#949494", fontWeight: 500, margin: 0, lineHeight: 1.5 }}>
-              {t("实验观察时间：墨西哥时间 9.22 - 10.14（9.22 - 10% 分流；9.29 - 30% 分流；10.10 - 50% 分流）", "Observation window: Mexico time 9.22 - 10.14 (9.22 - 10% traffic; 9.29 - 30% traffic; 10.10 - 50% traffic).")}
+              {t("实验观察时间：墨西哥时间 9.22 - 10.14（9.22 - 10% 分流；9.29 - 30% 分流；10.10 - 50% 分流）", "Observation window: Mexico time 9.22 - 10.14 (9.22 - 10% traffic; 9.29 - 30% traffic; 10.10 - 50% traffic)")}
             </p>
             <p style={{ fontSize: 14, fontWeight: 500, margin: 0, lineHeight: 1.5 }}>
               <span style={{ color: "#949494" }}>{t("阶段性结论（数据为相对 %）：", "Interim findings (figures are relative %):")}</span>{"\n"}
               <span style={{ color: "#ECECEC" }}>{t("实验组用户略有优势，当日额度使用率 + 2.15%，当日放款效率 + 1.30%", "the test group showed a slight edge — same-day credit utilization +2.15%, same-day disbursement efficiency +1.30%.")}</span>
             </p>
             <p style={{ fontSize: 14, color: "#ECECEC", fontWeight: 500, margin: 0, lineHeight: 1.5 }}>
-              {t("实验结果显示，额度推荐机制对核心指标产生正向影响。 整体组当日下单率、额度使用率与当日放款效率均有小幅提升；其中，有修改金额行为的用户提升更明显，说明该策略能有效降低额度选择成本，并提升用户对优惠额度的感知与使用效率。", "Results show the recommendation mechanism positively affected core metrics. The overall group saw small gains in same-day order rate, credit utilization and disbursement efficiency; the lift was clearer among users who edited their amount, indicating the strategy effectively lowers the cost of choosing a limit and improves users' perception and use of preferential limits.")}
+              {t("实验结果显示，额度推荐机制对核心指标产生正向影响。 整体组当日下单率、额度使用率与当日放款效率均有小幅提升；其中，有修改金额行为的用户提升更明显，说明该策略能有效降低额度选择成本，并提升用户对优惠额度的感知与使用效率", "Results show the recommendation mechanism positively affected core metrics. The overall group saw small gains in same-day order rate, credit utilization and disbursement efficiency; the lift was clearer among users who edited their amount, indicating the strategy effectively lowers the cost of choosing a limit and improves users' perception and use of preferential limits")}
             </p>
             <p style={{ fontSize: 12, color: "#595959", fontWeight: 500, margin: 0, marginTop: 16 * s, lineHeight: 1.5 }}>
-              {t("*数据已做脱敏处理，仅保留核心趋势与设计验证结论", "*Data has been anonymized; only core trends and design-validation conclusions are retained.")}
+              {t("*数据已做脱敏处理，仅保留核心趋势与设计验证结论", "*Data has been anonymized; only core trends and design-validation conclusions are retained")}
             </p>
           </div>
         </div>
@@ -4090,8 +4090,8 @@ const JOBY_SAFETY_SLIDES = [
       en: "New user / no invites / invited stage\nFocus: unclaimed base reward + leaderboard mechanic",
     },
     body: {
-      zh: "用户还没有投入行为，对活动价值感知弱。先用确定可获得的基础奖励降低参与门槛，再用排行榜额外奖励建立预期，让用户愿意开始邀请。",
-      en: "The user hasn't invested any effort yet and barely perceives the campaign's value. Start by lowering the entry barrier with a guaranteed base reward, then build anticipation with extra leaderboard rewards so the user is willing to begin inviting.",
+      zh: "用户还没有投入行为，对活动价值感知弱。先用确定可获得的基础奖励降低参与门槛，再用排行榜额外奖励建立预期，让用户愿意开始邀请",
+      en: "The user hasn't invested any effort yet and barely perceives the campaign's value. Start by lowering the entry barrier with a guaranteed base reward, then build anticipation with extra leaderboard rewards so the user is willing to begin inviting",
     },
     image: yaoxinD1Image.src,
     imageTag: "",
@@ -4103,8 +4103,8 @@ const JOBY_SAFETY_SLIDES = [
       en: "Invitee bound but not yet disbursed\nFocus: base reward + leaderboard mechanic",
     },
     body: {
-      zh: "用户已经付出成本但还没拿到奖励，最需要的是看到“马上就能兑现”。强调完成放款后即可获得基础奖励，同时计入排行榜，让用户推动好友完成最后一步。",
-      en: "The user has already put in effort but hasn't received a reward, so they most need to feel it's “about to pay off.” Emphasize that completing disbursement earns the base reward and counts toward the leaderboard, motivating the user to push their friend through the final step.",
+      zh: "用户已经付出成本但还没拿到奖励，最需要的是看到“马上就能兑现”。强调完成放款后即可获得基础奖励，同时计入排行榜，让用户推动好友完成最后一步",
+      en: "The user has already put in effort but hasn't received a reward, so they most need to feel it's “about to pay off.” Emphasize that completing disbursement earns the base reward and counts toward the leaderboard, motivating the user to push their friend through the final step",
     },
     image: yaoxinD2Image.src,
     imageTag: "",
@@ -4116,8 +4116,8 @@ const JOBY_SAFETY_SLIDES = [
       en: "Has disbursement but not on the leaderboard\nFocus: rank gap to enter + extra reward + base reward earned",
     },
     body: {
-      zh: "用户已经验证活动能赚钱，基础奖励不再是主要驱动力。此时要告诉他“离上榜还有多远”和“上榜后能多拿什么”，把目标从拿奖励升级为冲榜。",
-      en: "The user has confirmed the campaign can pay, so the base reward is no longer the main driver. Now tell them “how far they are from ranking” and “how much more they'd get once ranked,” upgrading the goal from earning a reward to climbing the leaderboard.",
+      zh: "用户已经验证活动能赚钱，基础奖励不再是主要驱动力。此时要告诉他“离上榜还有多远”和“上榜后能多拿什么”，把目标从拿奖励升级为冲榜",
+      en: "The user has confirmed the campaign can pay, so the base reward is no longer the main driver. Now tell them “how far they are from ranking” and “how much more they'd get once ranked,” upgrading the goal from earning a reward to climbing the leaderboard",
     },
     image: yaoxinD3Image.src,
     imageTag: "",
@@ -4129,8 +4129,8 @@ const JOBY_SAFETY_SLIDES = [
       en: "Disbursed and ranked, but not in the top tier\nFocus: gap to next tier + reward upgrades to XX + all rewards earned",
     },
     body: {
-      zh: "用户已经进入竞争阶段，关注点从“有没有奖励”变成“如何拿更多奖励”。突出下一档位的收益差距，让用户觉得再努力一点就能获得更高回报。",
-      en: "The user has entered the competitive stage; their focus shifts from “is there a reward” to “how to get more.” Highlight the payoff gap to the next tier so the user feels a little more effort yields a bigger return.",
+      zh: "用户已经进入竞争阶段，关注点从“有没有奖励”变成“如何拿更多奖励”。突出下一档位的收益差距，让用户觉得再努力一点就能获得更高回报",
+      en: "The user has entered the competitive stage; their focus shifts from “is there a reward” to “how to get more.” Highlight the payoff gap to the next tier so the user feels a little more effort yields a bigger return",
     },
     image: yaoxinD4Image.src,
     imageTag: "",
@@ -4142,8 +4142,8 @@ const JOBY_SAFETY_SLIDES = [
       en: "Disbursed and in the top tier\nFocus: current rank + maintain position + rewards earned",
     },
     body: {
-      zh: "用户已经达到最高梯度，继续强调升级已没有吸引力。此时要利用排名心理，突出当前领先优势和已获得奖励，引导用户持续邀请、防止被后来者超越。",
-      en: "The user has reached the top tier, so pushing further upgrades no longer appeals. Tap into ranking psychology: highlight their current lead and earned rewards to keep them inviting and prevent being overtaken.",
+      zh: "用户已经达到最高梯度，继续强调升级已没有吸引力。此时要利用排名心理，突出当前领先优势和已获得奖励，引导用户持续邀请、防止被后来者超越",
+      en: "The user has reached the top tier, so pushing further upgrades no longer appeals. Tap into ranking psychology: highlight their current lead and earned rewards to keep them inviting and prevent being overtaken",
     },
     image: yaoxinD5Image.src,
     imageTag: "",
@@ -4804,7 +4804,7 @@ function InviteRankingSection({ scale }: { scale?: number }) {
               {t("需求背景", "Background")}
             </p>
             <p style={{ fontFamily: "var(--font-sans)", fontSize: 14 * s, fontWeight: 500, color: "#3B3B3B", margin: 0, lineHeight: "normal", maxWidth: 470 * s }}>
-              {t("新增排行榜玩法，实现邀新活动的用户参与度和邀请数量的双向提升。", "Adding a leaderboard mechanic to lift both user engagement and invite volume in the referral campaign.")}
+              {t("新增排行榜玩法，实现邀新活动的用户参与度和邀请数量的双向提升", "Adding a leaderboard mechanic to lift both user engagement and invite volume in the referral campaign")}
             </p>
           </div>
         </div>
