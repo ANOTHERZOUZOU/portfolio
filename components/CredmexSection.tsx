@@ -1039,34 +1039,77 @@ function TypeHierarchySection({ scale }: { scale?: number }) {
   );
 }
 
-function TiltCard({ children, enabled }: { children: ReactNode; enabled: boolean }) {
+function TiltCard({
+  children,
+  enabled,
+  className,
+  style: outerStyle,
+}: {
+  children: ReactNode;
+  enabled: boolean;
+  className?: string;
+  style?: CSSProperties;
+}) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [style, setStyle] = useState<CSSProperties>({});
+  const [hovering, setHovering] = useState(false);
+  const [releasing, setReleasing] = useState(false);
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
+  const releaseTimer = useRef<number | null>(null);
+
+  // 外部传入的 transform (入场动画 / 定位偏移) 必须保留。未 hover 时直接用
+  // outerStyle 的动态 transform (飞入动效); hover 时把 3D 倾斜叠加在其后。
+  const baseTransform =
+    typeof outerStyle?.transform === "string" ? outerStyle.transform : "";
+
+  useEffect(() => {
+    return () => {
+      if (releaseTimer.current) window.clearTimeout(releaseTimer.current);
+    };
+  }, []);
 
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!enabled || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setStyle({
-      transform: `perspective(600px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) scale3d(1.03,1.03,1.03)`,
-      transition: "transform 0.1s ease-out",
-    });
+    if (releaseTimer.current) {
+      window.clearTimeout(releaseTimer.current);
+      releaseTimer.current = null;
+    }
+    setReleasing(false);
+    setHovering(true);
+    setTilt({ rx: -y * 8, ry: x * 8 });
   };
 
   const handleLeave = () => {
-    setStyle({
-      transform: "perspective(600px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)",
-      transition: "transform 0.4s cubic-bezier(0.25,1,0.5,1)",
-    });
+    setHovering(false);
+    setReleasing(true);
+    setTilt({ rx: 0, ry: 0 });
+    if (releaseTimer.current) window.clearTimeout(releaseTimer.current);
+    // 回弹动画结束后清除 releasing, 让卡片回到纯 outerStyle (飞入动效不受影响)。
+    releaseTimer.current = window.setTimeout(() => setReleasing(false), 420);
   };
+
+  // hover / 回弹期间才叠加 3D transform 与过渡; 静止 (未交互) 时保持 outerStyle 原样,
+  // 让滚动驱动的飞入动效逐帧生效, 不被 transition 拖拽。
+  const hoverStyle: CSSProperties =
+    enabled && (hovering || releasing)
+      ? {
+          transform: `${baseTransform} perspective(600px) rotateY(${tilt.ry}deg) rotateX(${tilt.rx}deg) scale3d(${hovering ? 1.03 : 1},${hovering ? 1.03 : 1},1)`,
+          transition: hovering
+            ? "transform 0.1s ease-out"
+            : "transform 0.4s cubic-bezier(0.25,1,0.5,1)",
+          transformStyle: "preserve-3d",
+        }
+      : {};
 
   return (
     <div
       ref={ref}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      style={{ ...style, transformStyle: "preserve-3d" }}
+      className={className}
+      onMouseMove={enabled ? handleMove : undefined}
+      onMouseLeave={enabled ? handleLeave : undefined}
+      style={{ ...outerStyle, ...hoverStyle }}
     >
       {children}
     </div>
@@ -5042,7 +5085,8 @@ function InviteRankingShowcaseSection({ scale }: { scale?: number }) {
     radius = 20,
     motionStyle?: CSSProperties
   ) => (
-    <div
+    <TiltCard
+      enabled
       className="absolute overflow-hidden"
       style={{
         left: x,
@@ -5063,7 +5107,7 @@ function InviteRankingShowcaseSection({ scale }: { scale?: number }) {
           objectFit: "cover",
         }}
       />
-    </div>
+    </TiltCard>
   );
 
   const carousel = (
@@ -5080,7 +5124,8 @@ function InviteRankingShowcaseSection({ scale }: { scale?: number }) {
     switchMode: "vertical" | "horizontal" | "fade" = "fade",
     transitionEnabled = true
   ) => (
-    <div
+    <TiltCard
+      enabled
       className="absolute overflow-hidden"
       style={{
         left: x,
@@ -5139,7 +5184,7 @@ function InviteRankingShowcaseSection({ scale }: { scale?: number }) {
           );
         })
       ) : null}
-    </div>
+    </TiltCard>
   );
 
   return (
