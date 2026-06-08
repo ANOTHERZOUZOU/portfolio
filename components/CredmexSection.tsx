@@ -3411,6 +3411,7 @@ function StackingPhoneComposite({
 function StackingCardsSection() {
   const t = useT();
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const titleRef = useRef<HTMLDivElement | null>(null);
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const imgWrapRefs = useRef<(HTMLDivElement | null)[]>([]);
   const imgInnerRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -3468,6 +3469,9 @@ function StackingCardsSection() {
       const gridOffsetRightPx = cachedOffsetR;
       const gridOffsetLeftPx = cachedOffsetL;
 
+      // 第一张图的实时放大状态, 循环内 i===0 时记录, 用于实时联动开场标题。
+      let firstImgScale = 0;
+
       for (let i = 0; i < STACKING_N; i++) {
         const slideEl = slideRefs.current[i];
         const imgWrap = imgWrapRefs.current[i];
@@ -3520,6 +3524,10 @@ function StackingCardsSection() {
         const scaleEnd = 1 - shortEnd;
         const scaleVal = Math.max(0.01, scaleIn - scaleOut);
 
+        // 第一张图"放大进入"的纯进度 (0→1), 只反映从小变大, 不含后续缩出/淡出,
+        // 避免第二张进入时数值回落导致标题误回来。
+        if (i === 0) firstImgScale = shortIn;
+
         const radius = 16 * (1 + 4 * shortOut) * (1 + 4 * (1 - shortIn));
 
         if (progressIn >= 1) {
@@ -3563,6 +3571,20 @@ function StackingCardsSection() {
           contentEl.style.visibility = alpha > 0.01 ? "visible" : "hidden";
         }
       }
+
+      // 开场标题: 实时联动第一张图片的真实放大程度。图片放大到 START 阈值前标题固定;
+      // 之后随图片继续放大 (到 END 阈值) 实时上移 + 淡出被顶出去, 完全与图片同步。
+      const titleEl = titleRef.current;
+      if (titleEl) {
+        // firstImgScale 是第一张图"放大进入"进度 (0→1, 到位后保持 1, 第二张时不回落)。
+        const START = 0.6;  // 图片放大到 60% 时标题就开始上顶
+        const END = 0.92;   // 图片接近放大到位时标题已顶出
+        const tp = clamp((firstImgScale - START) / (END - START));
+        const eased = tp * tp;
+        titleEl.style.transform = `translateY(${-eased * 60}vh)`;
+        titleEl.style.opacity = `${clamp(1 - tp / 0.85)}`;
+        titleEl.style.visibility = tp >= 1 ? "hidden" : "visible";
+      }
     };
 
     const onScroll = () => {
@@ -3604,8 +3626,42 @@ function StackingCardsSection() {
           top: "2.5rem",
           width: "100%",
           height: "calc(100dvh - 5rem)",
+          overflow: "hidden",
         }}
       >
+        {/* 开场标题: 随滚动上移被裁出, 衔接堆叠卡片入场 */}
+        <div
+          ref={titleRef}
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "center",
+            paddingTop: "18vh",
+            zIndex: 4,
+            pointerEvents: "none",
+            willChange: "transform, opacity",
+          }}
+        >
+          <h2
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: "clamp(40px, 4.44vw, 64px)",
+              fontWeight: 600,
+              lineHeight: 1,
+              letterSpacing: "0.02em",
+              color: "#fff",
+              textAlign: "center",
+              margin: 0,
+              whiteSpace: "pre-line",
+            }}
+          >
+            {t("动态权益反馈设计", "Dynamic Benefit Feedback")}
+          </h2>
+        </div>
+
         {/* Slides container */}
         <div style={{ position: "relative", width: "100%", height: "100%" }}>
           {STACKING_CARDS.map((card, i) => (
