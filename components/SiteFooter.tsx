@@ -31,6 +31,7 @@ const NAV: { zh: string; en: string; index: string; href: string }[] = [
   { zh: "素材库搭建", en: "Asset Library", index: "V", href: "#material" },
   { zh: "其他项目", en: "Other Projects", index: "VI", href: "#other-projects" },
   { zh: "AI 工具", en: "AI Tools", index: "VII", href: "#ai" },
+  { zh: "过往作品", en: "Past Work", index: "VIII", href: "#past-work" },
 ];
 
 function useCopyEmail() {

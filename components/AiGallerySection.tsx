@@ -40,8 +40,7 @@ const GALLERY_IMAGES = [
 ];
 
 // 画廊放大段之后, 纵向一张接一张的全宽长图 (各自原比例, 不裁切)。
-// 跳过前 5 张 (w1~w5), 从 w6 开始。
-const WORK_IMAGES = Array.from({ length: 18 }, (_, i) => `/ai-gallery/work/w${i + 6}.webp`);
+const WORK_IMAGES = Array.from({ length: 15 }, (_, i) => `/ai-gallery/work/w${i + 1}.webp`);
 
 const SANS = "var(--font-sans)";
 
@@ -102,7 +101,7 @@ export default function AiGallerySection() {
   }, []);
 
   return (
-    <section data-light-section={false} style={{ backgroundColor: "#000", fontFamily: SANS }}>
+    <section id="past-work" data-light-section={false} style={{ backgroundColor: "#000", fontFamily: SANS }}>
       {/* 标题区 (Figma node 2231:49151): 年份小字 + 居中大标题 */}
       <div
         ref={headerRef}
