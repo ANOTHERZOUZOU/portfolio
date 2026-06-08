@@ -40,7 +40,10 @@ const GALLERY_IMAGES = [
 ];
 
 // 画廊放大段之后, 纵向一张接一张的全宽长图 (各自原比例, 不裁切)。
-const WORK_IMAGES = Array.from({ length: 15 }, (_, i) => `/ai-gallery/work/w${i + 1}.webp`);
+// 跳过 w14。
+const WORK_IMAGES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15].map(
+  (n) => `/ai-gallery/work/w${n}.webp`
+);
 
 const SANS = "var(--font-sans)";
 
