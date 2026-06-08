@@ -18,6 +18,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLang, useT } from "@/lib/i18n";
 import FloatingTagsHero from "./FloatingTagsHero";
 import AiProjectSection from "./AiProjectSection";
+import AiGallerySection from "./AiGallerySection";
 import OtherProjectsSection from "./OtherProjectsSection";
 import DesignSkullSection from "./DesignSkullSection";
 import SiteFooter from "./SiteFooter";
@@ -439,6 +440,9 @@ export const CredmexSection = forwardRef<HTMLElement, { id?: string }>(
 
         {/* AI 项目: 21 屏横向滚动叙事 */}
         <AiProjectSection />
+
+        {/* AI 作品画廊: 滚动驱动, 中间图放大成主视觉 */}
+        <AiGallerySection />
 
         {/* 结尾「揭示式 footer」: 骷髅模块上浮, 下层 footer 被逐渐露出。
             独立 relative 容器 + 绿色底色:
@@ -3637,8 +3641,10 @@ function StackingCardsSection() {
             position: "absolute",
             inset: 0,
             display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            gap: 24,
             paddingTop: "18vh",
             zIndex: 4,
             pointerEvents: "none",
@@ -3658,8 +3664,25 @@ function StackingCardsSection() {
               whiteSpace: "pre-line",
             }}
           >
-            {t("动态权益反馈设计", "Dynamic Benefit Feedback")}
+            {t("体验驱动的动效设计", "Experience-Driven Motion Design")}
           </h2>
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: 18,
+              fontWeight: 400,
+              lineHeight: 1.6,
+              color: "#949494",
+              textAlign: "center",
+              maxWidth: 800,
+              margin: 0,
+            }}
+          >
+            {t(
+              "通过动态反馈、状态切换与场景化动画，强化用户感知并提升转化效率",
+              "Through dynamic feedback, state transitions and scenario-based animation, strengthening user perception and improving conversion efficiency"
+            )}
+          </p>
         </div>
 
         {/* Slides container */}
